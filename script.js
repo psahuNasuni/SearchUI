@@ -3,11 +3,12 @@ function appendData(data) {
     var mainFields = document.getElementById("data");
     // alert(data.length);
     for (var i = 0; i < data.length; i++) {
-        var link = document.createElement("a");
-        var content = document.createElement("p")
+        var link = document.createElement("th");
+        var content = document.createElement("tr")
         console.log(data.length);
         if(data[i]._source.content!=""){
-        link.innerHTML = "<tr class='tr'><th>File Name<br>"+"<tr><td><a href=#>"+data[i]._source.extension+"</a></th></tr>" + "<br>" ;
+        console.log(data[i]._source.access_url)
+        link.innerHTML = "<tr class='tr'><th>File Name<br>"+"<tr><td><a href="+data[i]._source.access_url+">"+data[i]._source.object_key+"</a></th></tr>" + "<br>" ;
         content.innerHTML="<tr><td><p>Content</p>" + data[i]._source.content +"</td></tr><br>";
         mainFields.appendChild(link);
         mainFields.appendChild(content);

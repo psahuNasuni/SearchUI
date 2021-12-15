@@ -1,21 +1,15 @@
 input {
 text-align: center;
-}
+};
 
 
-.tr {
+tr {
     border: 1px solid black;
-    background-color: blue;
-}
-
-th {
-    border: 1px solid black;
-    background-color: blue;
-}
+};
 
 table {
     border: 1px solid black;
-}
+};
 
 /* dataDiv {
     border: 1px solid black;
