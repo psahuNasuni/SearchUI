@@ -3,29 +3,20 @@ text-align: center;
 }
 
 
-table {
-    width: 100%;
-    background-color: rgb(235, 230, 230);
-    
-
-
+.tr {
+    border: 1px solid black;
+    background-color: blue;
 }
 
-th td tr {
+th {
+    border: 1px solid black;
+    background-color: blue;
+}
+
+table {
     border: 1px solid black;
 }
 
-tr {
-    border-collapse: collapse;
-}
-th {
-    background-color: rgb(223, 224, 223);
-}
-
-tr:nth-child(even) {
-    background-color: white;
-}
-
-tr:nth-child(odd) {
-    background-color: rgb(160, 201, 140);
-}
+/* dataDiv {
+    border: 1px solid black;
+} */

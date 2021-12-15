@@ -3,29 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <title>ElasticSearch Data</title>
-    <link href="style.css" rel="stylesheet" />
+    <script>
+       var head = document.getElementsByTagName('HEAD')[0]; 
+       var link = document.createElement('link');
+       link.rel = 'stylesheet'; 
+       link.type = 'text/css';
+       link.href = 'style.css';
+       head.appendChild(link);
+    </script>
   </head>
   <body>
     <h1>Elasti Search</h1>
   <input id="search" autocomplete="off" placeholder="Search">
+
   <div id="results"></div>
-  <p id="noresults">No results. Try another search term.</p>
-  <p id="loading">Getting results...</p>
-  <div className="DataTable">
-    <table>
-      <tr>
-        <th>Object Key</th>
-        <th>index</th>
-        <th>Content</th>
-      </tr>
-      <tr>
-        <td id="object_key"></td>
-        <td id="index"></td>
-        <td id="content"></td>
-      </tr>
-    </table>
+  <!-- <p id="noresults">No results. Try another search term.</p>
+  <p id="loading">Getting results...</p> -->
   </div>
-    <div id="mydata"></div>
+    <div>
+      <br>
+      <table>
+        <div class="dataDiv" id="data"></div>
+      </table>
+      <br>
+    </div>
     <script src="script.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- <script src="table.js"></script> -->

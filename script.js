@@ -1,17 +1,19 @@
 
 function appendData(data) {
-    var mainFields = document.getElementById("mydata");
+    var mainFields = document.getElementById("data");
     // alert(data.length);
     for (var i = 0; i < data.length; i++) {
-        var div = document.createElement("div");
-        console.log(data.length)
-        // var test = 'object_key: ' + data[i].object_key + ' Index : ' + data[i]._index + ' Content : ' + data[i]._source.content;
-        // console.log(test);
-        document.getElementById("object_key").innerHTML = data[i].object_key;
-        document.getElementById("index").innerHTML = data[i]._index;
-        document.getElementById("content").innerHTML = data[i]._source.content;
-        mainFields.appendChild(div);
+        var link = document.createElement("a");
+        var content = document.createElement("p")
+        console.log(data.length);
+        if(data[i]._source.content!=""){
+        link.innerHTML = "<tr class='tr'><th>File Name<br>"+"<tr><td><a href=#>"+data[i]._source.extension+"</a></th></tr>" + "<br>" ;
+        content.innerHTML="<tr><td><p>Content</p>" + data[i]._source.content +"</td></tr><br>";
+        mainFields.appendChild(link);
+        mainFields.appendChild(content);
         stop();
+        }
+        
     }
 
 }
@@ -37,11 +39,12 @@ function search(data) {
         }
     })
     .then(data => {
-        if(data.length===0){
+        if(data.length==0){
             console.log("empty");
         }else{
         console.log(data);
-        appendData(data);}
+        appendData(data);
+        stop;}
         // search(data);
         // console.log(search);
         // displayCocktail(data)

@@ -26,7 +26,7 @@ input {
 }
 
 a {
-  color: SteelBlue;
+  color: blue;
   text-decoration: none;
 }
 
@@ -42,4 +42,12 @@ img {
 
 .result {
   display: flex;
+}
+ 
+data_div {
+  border:1px solid black;
+}
+
+.border {
+  border:1px solid red;
 }
