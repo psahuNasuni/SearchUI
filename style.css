@@ -1,16 +1,12 @@
-input {
-text-align: center;
-};
-
+th {
+    text-align: left;
+    margin-bottom: 10px;
+    padding-top: 10px;
+}
 
 tr {
-    border: 1px solid black;
-};
+    text-align: left;
+    margin-bottom: 10px;
+    padding-bottom: 1;
+}
 
-table {
-    border: 1px solid black;
-};
-
-/* dataDiv {
-    border: 1px solid black;
-} */

@@ -5,13 +5,20 @@ function appendData(data) {
     for (var i = 0; i < data.length; i++) {
         var link = document.createElement("th");
         var content = document.createElement("tr")
-        console.log(data.length);
-        if(data[i]._source.content!=""){
-        console.log(data[i]._source.access_url)
-        link.innerHTML = "<tr class='tr'><th>File Name<br>"+"<tr><td><a href="+data[i]._source.access_url+">"+data[i]._source.object_key+"</a></th></tr>" + "<br>" ;
-        content.innerHTML="<tr><td><p>Content</p>" + data[i]._source.content +"</td></tr><br>";
+        // console.log(data.length);
+        if(data[i]._source.content==""){
+            // console.log(data[i]._source.object_key)
+            var filePath = data[i]._source.object_key;
+            
+        }else{
+        var fileName = data[i]._source.object_key;
+        console.log("filename:  "+fileName)
+        link.innerHTML = "<br><tr><td><a href="+data[i]._source.access_url+">"+data[i]._source.root_handle+"/"+fileName.substring(filePath.length)+"</a></td></tr>" ;
+        content.innerHTML="<tr><td>"+ data[i]._source.content +"</td></tr><br>";
         mainFields.appendChild(link);
         mainFields.appendChild(content);
+        delete(filePath);
+        // data=null;
         stop();
         }
         
