@@ -23,8 +23,11 @@ def lambda_handler(event, context):
     print(context.invoked_function_arn)
     secret_nct_nce_admin = get_secret('nct/nce/os/admin', 'us-east-2')
     role = 'arn:aws:iam::514960042727:role/Lambda-os-search'
+    # role = secret_data_internal['discovery_lambda_role_arn']
     role_data = '{"backend_roles":["arn:aws:iam::514960042727:user/sarwikar","' + \
         role + '"],"hosts": [],"users": ["automation"]}'
+    # data = '{\"backend_roles\":[\"arn:aws:iam::514960042727:user/ssa\"],\"hosts\": [],\"users\": [\"automation\",
+    # \"arn:aws:iam::514960042727:user/sarwikar\",\"' + role + '\"]}'
     print(role_data)
     with open("/tmp/" + "/data.json", "w") as write_file:
         write_file.write(role_data)
@@ -43,6 +46,7 @@ def lambda_handler(event, context):
     print(output)
     print(link)
     es = launch_es(secret_nct_nce_admin['nac_es_url'], 'us-east-2')
+    # search(es, '2021-12-01T09:17:45.274Z')
     resp = search(es, event)
     response = {
         "statusCode": 200,
@@ -73,6 +77,52 @@ def search(es, event):
 
     try:
         for elem in es.cat.indices(format="json"):
+            # query = {
+            #     "size": 25,
+            #     "query": {
+            #         "multi_match": {
+            #             "query": event['queryStringParameters']['q'],
+            #             "fields": ["dest_bucket", "object_key", "size", "event_name", "awsRegion", "extension",
+            #                       "volume_name", "root_handle", "source_bucket", "content", "access_url"]
+            #         }
+            #     }
+            # }
+            # query = {
+            #     "size": 25,
+            #     "query": {
+            #         "multi_match": {
+            #             "query": event['queryStringParameters']['q'],
+            #             "fields": ["dest_bucket", "object_key", "size", "event_name", "awsRegion", "extension",
+            #                       "volume_name", "root_handle", "source_bucket", "content", "access_url"]
+            #         }
+            #     },
+            #     "highlight": {
+            #         "pre_tags": [
+            #              "<strong>"
+            #         ],
+            #         "post_tags": [
+            #              "</strong>"
+            #         ],
+            #         "fields": {
+            #              "object_key": {}
+            #             }
+            #      }
+            # }
+            ######################################################
+            # query = {
+            #     "size": 25,
+            #     "query": {
+            #         "match": {
+            #             "content": event['queryStringParameters']['q']
+            #         }
+            #     },
+            #     "highlight": {
+            #         "fields": {
+            #              "content": {}
+            #             }
+            #      }
+            # }
+            #####################################################
             query = {
                 "size": 25,
                 "query": {
@@ -91,11 +141,18 @@ def search(es, event):
                         "content": {}
                     }
                 }
+                # "highlight": {
+                #     "fields": {
+                #          "content": {}
+                #         }
+                #  }
             }
 
             resp = es.search(index=elem['index'], body=query)
             print(resp['hits']['hits'])
             return resp['hits']['hits']
+            # for i in resp['hits']['hits']:
+            #     pprint.pprint(i)
     except Exception as e:
         logging.error('ERROR: {0}'.format(str(e)))
         logging.error('ERROR: Unable to index line:"{0}"'.format(str(event)))
