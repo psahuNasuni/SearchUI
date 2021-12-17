@@ -1,3 +1,8 @@
+#noresults,
+#loading {
+    display: none;
+}
+
 input {
     text-align: center;
 }
@@ -17,8 +22,9 @@ table {
     padding: 5px;
 }
 
-#data {
+#results {
     width: 67%;
+    margin: 20px 0;
 }
 
 .elasti_link {
@@ -30,7 +36,11 @@ span.content {
     display: block;
 }
 
-#data h5 {
+#results h5 {
     margin-bottom: 5px;
     margin-top: 5px;
+}
+
+.result {
+    display: flex;
 }

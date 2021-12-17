@@ -3,14 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <title>ElasticSearch Data</title>
-    <script>
-       var head = document.getElementsByTagName('HEAD')[0]; 
-       var link = document.createElement('link');
-       link.rel = 'stylesheet'; 
-       link.type = 'text/css';
-       link.href = 'style.css';
-       head.appendChild(link);
-    </script>
   </head>
   <body>
 	<div class="container">
@@ -19,22 +11,19 @@
 				<h1 class="text-center">Nasuni - Elastic Search</h1>
 				<div class="text-center"><input class="searchMe" id="search" autocomplete="off" placeholder="Search"></div>
 
-				<div id="results"></div>
-				<!-- <p id="noresults">No results. Try another search term.</p>
-				<p id="loading">Getting results...</p> -->
-				
-				<div class="col-md-offset-3">
-				  <br>
-					<div id="data"></div>
-				  <br>
+				<div class="col-md-offset-3 col-lg-offset-3 col-sm-offset-3 col-xs-offset-3">
+					<div id="results"></div>
+					<p id="noresults">No results. Try another search term.</p>
+					<p id="loading">Getting results...</p>
 				</div>
 			</div>
 		</div>
 	</div>
 	
 	
-    <script src="script.js"></script>
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="search.js"></script>
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="style.css">
