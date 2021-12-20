@@ -22,9 +22,13 @@ def lambda_handler(event, context):
     # secret_data_internal = get_secret('nct-nce-internal-' + context.invoked_function_arn[76:], 'us-east-2')
     print(context.invoked_function_arn)
     secret_nct_nce_admin = get_secret('nct/nce/os/admin', 'us-east-2')
-    role = 'arn:aws:iam::514960042727:role/Lambda-os-search'
+    role = 'arn:aws:iam::514960042727:role/service-role/SearchESIndexRole'
+    
+    # role = secret_data_internal['discovery_lambda_role_arn']
     role_data = '{"backend_roles":["arn:aws:iam::514960042727:user/sarwikar","' + \
         role + '"],"hosts": [],"users": ["automation"]}'
+    # data = '{\"backend_roles\":[\"arn:aws:iam::514960042727:user/ssa\"],\"hosts\": [],\"users\": [\"automation\",
+    # \"arn:aws:iam::514960042727:user/sarwikar\",\"' + role + '\"]}'
     print(role_data)
     with open("/tmp/" + "/data.json", "w") as write_file:
         write_file.write(role_data)
@@ -43,6 +47,7 @@ def lambda_handler(event, context):
     print(output)
     print(link)
     es = launch_es(secret_nct_nce_admin['nac_es_url'], 'us-east-2')
+    # search(es, '2021-12-01T09:17:45.274Z')
     resp = search(es, event)
     response = {
         "statusCode": 200,
@@ -68,13 +73,19 @@ def launch_es(link, region):
 
 
 def search(es, event):
+    docs_list=[]
     print('event', event)
     print('queryStringParameters', event['queryStringParameters']['q'])
-
+    #"size": 25, 
+    # for index in es.indices.get('*'):
+    #     print('indices',index)
+    for elem in es.cat.indices(format="json"):
+        print('elem',elem)
     try:
         for elem in es.cat.indices(format="json"):
+        # for index in es.indices.get('*'):
             query = {
-                "size": 25,
+                
                 "query": {
                     "match": {
                         "content": event['queryStringParameters']['q']
@@ -92,10 +103,19 @@ def search(es, event):
                     }
                 }
             }
-
+            # print('indices',index)
+            # resp = es.search(index=index, body=query)
+            # print(resp['hits']['hits'])
+            # print(resp)
+            # return resp['hits']['hits']
+            print('elem in for loop',elem)
             resp = es.search(index=elem['index'], body=query)
-            print(resp['hits']['hits'])
-            return resp['hits']['hits']
+            if resp['hits']['hits']:
+                print(resp['hits']['hits'])
+                docs_list+=[resp['hits']['hits']]
+            
+            
+        return docs_list
     except Exception as e:
         logging.error('ERROR: {0}'.format(str(e)))
         logging.error('ERROR: Unable to index line:"{0}"'.format(str(event)))
@@ -138,3 +158,5 @@ def get_secret(secret_name, region_name):
                 get_secret_value_response['SecretBinary'])
             # print('text_secret_data',secret)
     return json.loads(secret)
+
+
