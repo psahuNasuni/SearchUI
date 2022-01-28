@@ -4,16 +4,26 @@
     <meta charset="UTF-8" />
     <title>ElasticSearch Data</title>
   </head>
-  <body>
+  <body onload="start()">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				<h1 class="text-center">Elasti Search</h1>
-				<div class="text-center"><input class="searchMe" id="search" autocomplete="off" placeholder="Search"></div>
+				<h1 class="text-center">Nasuni ElasticSearch</h1>
+				<br>
+				<div>
+					<table>
+						<tr>
+							<td class="searchBar"><input class="searchMe" id="search" autocomplete="off" placeholder="Search"></td>
+							<td class="dropDownSelect"><select id="selectVolume" onchange="dropDownData(this.value)" onchange="this.form.submit()">
+								<option value="none" selected disabled hidden>Select Volume</option>
+							</select></td>
+						</tr>
+					</table>
+				</div>
 
 				<div class="col-md-offset-3 col-lg-offset-3 col-sm-offset-3 col-xs-offset-3">
 					<div id="results"></div>
-					<p id="noresults">No results. Try another search term.</p>
+					<p id="noresults">No results. Try another search term or try with another volume.</p>
 					<p id="loading">Getting results...</p>
 				</div>
 			</div>
@@ -24,6 +34,7 @@
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="search.js"></script>
+
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="style.css">
