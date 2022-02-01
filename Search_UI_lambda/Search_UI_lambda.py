@@ -76,38 +76,62 @@ def search(es, event):
     docs_list=[]
     print('event', event)
     print('queryStringParameters', event['queryStringParameters']['q'])
-    #"size": 25, 
-    # for index in es.indices.get('*'):
-    #     print('indices',index)
-    for elem in es.cat.indices(format="json"):
-        print('elem',elem)
+    char = '~'
+    if char in event['queryStringParameters']['q']:
+        l_search_term=event['queryStringParameters']['q'].split('~')
+        search_query=l_search_term[0]
+        volume_name=l_search_term[1]
+    else:
+        search_query=event['queryStringParameters']['q']
+        volume_name=''
     try:
         for elem in es.cat.indices(format="json"):
-        # for index in es.indices.get('*'):
-            query = {
-                
-                "query": {
-                    "match": {
-                        "content": event['queryStringParameters']['q']
-                    }
-                },
-                "highlight": {
-                    "pre_tags": [
-                        "<strong>"
-                    ],
-                    "post_tags": [
-                        "</strong>"
-                    ],
-                    "fields": {
-                        "content": {}
+            if not volume_name:
+                query = {
+                    "query": {
+                        "match": {
+                            "content": search_query
+                        }
+                    },
+                    "highlight": {
+                        "pre_tags": [
+                            "<strong>"
+                        ],
+                        "post_tags": [
+                            "</strong>"
+                        ],
+                        "fields": {
+                            "content": {}
+                        }
                     }
                 }
-            }
-            # print('indices',index)
-            # resp = es.search(index=index, body=query)
-            # print(resp['hits']['hits'])
-            # print(resp)
-            # return resp['hits']['hits']
+            else:
+                query = {
+                   "query": {
+                    "bool": {
+                     "must": [
+                            {
+                                "match": {"content": search_query}
+                            },
+                            {
+                            "match": {"volume_name": volume_name}
+                            }
+                            ]
+                         }
+                        },
+                    "highlight": {
+                        "pre_tags": [
+                            "<strong>"
+                        ],
+                        "post_tags": [
+                            "</strong>"
+                        ],
+                        "fields": {
+                            "content": {}
+                        }
+                    }
+                }
+
             print('elem in for loop',elem)
             resp = es.search(index=elem['index'], body=query)
             if resp['hits']['hits']:
