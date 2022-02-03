@@ -1,69 +1,97 @@
-#noresults, #loading {
-  display: none;
+/* body {
+	background-color: #8EC5FC;
+background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
+} */
+
+h1 {
+	font-size: 35px;
 }
 
-input {
-text-align: center;
+.container {
+	align-items: center;
+	height:100vh;
 }
 
-option {
-	border:none;
+.search-panel {
+	margin: auto;
+	display: flex;
+	width: 60%;
+}
+
+.result-panel {
+	width: 60%;
+	margin: auto;
+}
+
+.searchMe {
+	width: 75%;
+	height: 30px;
+	border: solid 1px grey;
+	padding: 0 5px;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+.select-box {
+	text-align: center;
+	width: 25%;
+	height: 30px;
+	border: solid 1px grey;
 	background-color: white;
+	border-left: solid 1px #b9adad;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
 }
 
-table {
-    border: none;
+option:hover {
+	border:1px solid black;
+}
+.searchMe:focus,
+.select-box:focus {
+	outline: none;
 }
 
-select#selectVolume{
-	border:none;
-	background-color: inherit;
-	border-left:solid 1px #b9adad ;
+#noresults, #loading {
+	display: none;
+  }
+
+  #results h5{
+	margin-bottom: 5p
+  }
+
+.result-status {
+	margin:10px 0;
+	font-size: 14px;
+	/* text-decoration: none; */
 }
 
-.searchMe{
-	width: 100%;
-	text-align: left;
-	border: 1px solid #b9adad;
-    padding: 5px;
-	margin-top: 1%;
+.result-box {
+	border-top: 1px solid grey;
+	margin-top: 30px;
 }
 
-#results{
-	width: 67%;
-	margin: 20px 0;
+.result-box:last-child {
+	margin-bottom: 30px;
 }
 
-.elasti_link{
+.result-title {
+	font-size: 18px;
 	font-weight: bold;
 }
 
-span.content {
-    margin-bottom: 20px;
-	display: block;
+.result-content {
+	height: 60px;
+    line-height: 20px;
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+	font-weight: normal;
 }
 
-#results h5{
-	margin-bottom: 5px;
-    margin-top: 20px;
-}
-
-.result {
-  display: flex;
-}
 
 
-.dropDownSelect {
-	width:20%;
-	height:20%;
-	border:none;
-	position:relative;
-	left:39%;
-}
 
-.searchBar {
-	width:70%;
-	position:relative;
-	left:60%
-
-}

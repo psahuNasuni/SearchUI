@@ -32,25 +32,26 @@ async function search() {
     loadingdiv.hide();
     noresults.hide();
     var content = document.createElement("div");
-    content.innerHTML += "<p><b>No volume was selected</p>";
+    content.innerHTML += "<p class='result-status'><b>No volume was selected</p>";
     resultdiv.append(content);
     return;}
 
-  let query = searchbox.val() ;
+  let query = searchbox.val();
   console.log(query);
   // Only run a query if the string contains at least three characters
   if (query.length > 0) {
     // Make the HTTP request with the query as a parameter and wait for the JSON results
-    let response_volumes = await $.get(apigatewayendpoint, { q: volume, size: 25 }, 'json');
+    // let response_volumes = await $.get(apigatewayendpoint, { q: volume, size: 25 }, 'json');
     let response_data = await $.get(apigatewayendpoint, { q: query, size: 25 }, 'json');
+    console.log(response_data);
 	//console.log(response,'response...');
     // Get the part of the JSON response that we care about
     //let results = response['hits']['hits'];
     if (response_data.length > 0) {
       loadingdiv.hide();
-    noresults.hide();
+      noresults.hide();
       // Iterate through the results and write them to HTML
-      resultdiv.append('<p>Found ' + response_data.length + ' results.</p>');
+      resultdiv.append('<p class="result-status">Found ' + response_data.length + ' results.</p>');
       appendData(resultdiv,response_data);
   } else {
     noresults.show();
@@ -62,7 +63,7 @@ async function search() {
 async function start() {
   response = await $.get(volume_api,'json');
   arr = response.split(",");
-  var chars = ['[',']','0','\\','"'];
+  var chars = ['[',']','\\','"'];
   replaceAll(chars);
 }
 
@@ -95,29 +96,43 @@ function appendDropDown(arr) {
 
 
 function appendData(resultdiv, data) {
+  var count;
     for (var i = 0; i < data.length; i++) {
         var link = document.createElement("h5");
-        var content = document.createElement("div");
+        var content = document.createElement("span");
+        var resultBox = document.createElement("div");
+        var spanDiv = document.createElement('div');
+        resultBox.classList.add("result-box");
+        spanDiv.classList.add("result-content");
 		
 		if (data[i].length > 0) {
+      
 			for (var j = 0; j < data[i].length; j++) {
         if(data[i][j]._source.volume_name==volume){
-          link.innerHTML = "<a class='elasti_link' href="+data[i][j]._source.access_url+">"+data[i][j]._source.object_key+"</a>" + "<br>" ;
-          resultdiv.append(link);
+          link.innerHTML = "<a class='elasti_link result-title' href="+data[i][j]._source.access_url+">"+data[i][j]._source.object_key+"</a>" + "<br>" ;
+          resultBox.append(link);
 				  if (data[i][j].highlight.content.length > 0) {
 					  for (var k = 0; k < data[i][j].highlight.content.length; k++) {
-						  content.innerHTML += "<p>" + data[i][j].highlight.content[k] + "</p>";
+						  // content.innerHTML += "<span>" + data[i][j].highlight.content[k] + "</span>";
+              content.innerHTML += data[i][j].highlight.content[k];
+              spanDiv.append(content);
+              resultBox.append(spanDiv);
 					}
-					resultdiv.append(content);
+          // spanDiv.append(content)
+        resultdiv.append(resultBox);
 				}
-				stop();
-        }else{
-          resultdiv.hide();
-        noresults.show();
+        // resultBox.append(spanDiv);
+        // resultdiv.append(resultBox);
+				// stop();
+        }
+        else{
+          noresults.show();
+        continue
         }
         
         stop();
 			}
 		}
+    
     }
 }
