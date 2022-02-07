@@ -34,9 +34,11 @@ async function search() {
     var content = document.createElement("div");
     content.innerHTML += "<p class='result-status'><b>No volume was selected</p>";
     resultdiv.append(content);
-    return;}
+    return;}else if (volume=="all"){
+      volume="";
+    }
 
-  let query = searchbox.val();
+  let query = searchbox.val()+"~"+volume;
   console.log(query);
   // Only run a query if the string contains at least three characters
   if (query.length > 0) {
@@ -108,7 +110,6 @@ function appendData(resultdiv, data) {
 		if (data[i].length > 0) {
       
 			for (var j = 0; j < data[i].length; j++) {
-        if(data[i][j]._source.volume_name==volume){
           link.innerHTML = "<a class='elasti_link result-title' href="+data[i][j]._source.access_url+">"+data[i][j]._source.object_key+"</a>" + "<br>" ;
           resultBox.append(link);
 				  if (data[i][j].highlight.content.length > 0) {
@@ -125,13 +126,9 @@ function appendData(resultdiv, data) {
         // resultdiv.append(resultBox);
 				// stop();
         }
-        else{
-          noresults.show();
-        continue
-        }
         
         stop();
-			}
+			
 		}
     
     }
