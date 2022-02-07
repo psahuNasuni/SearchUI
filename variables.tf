@@ -1,7 +1,7 @@
 
-################### Lambda PRovisioning Specific Variables ###################
+################### Lambda Provisioning Specific Variables ###################
 variable "runtime" {
-  default = "python3.9"
+  default = "python3.6"
 }
 variable "region" {
   default = "us-east-2"
@@ -10,7 +10,7 @@ variable "aws_profile" {
   default = "nasuni"
 }
 variable "admin_secret" {
-  default = "nct/nce/os/admin"
+  default = "nasuni-labs-os-admin"
 }
 variable "internal_secret" {
   default = "nac-es-internal"
