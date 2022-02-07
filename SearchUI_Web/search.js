@@ -43,7 +43,6 @@ async function search() {
   // Only run a query if the string contains at least three characters
   if (query.length > 0) {
     // Make the HTTP request with the query as a parameter and wait for the JSON results
-    // let response_volumes = await $.get(apigatewayendpoint, { q: volume, size: 25 }, 'json');
     let response_data = await $.get(apigatewayendpoint, { q: query, size: 25 }, 'json');
     console.log(response_data);
 	//console.log(response,'response...');
@@ -62,6 +61,7 @@ async function search() {
   loadingdiv.hide();
 }
 
+//Iterate volume names from API to drop down menu
 async function start() {
   response = await $.get(volume_api,'json');
   arr = response.split(",");
@@ -69,6 +69,7 @@ async function start() {
   replaceAll(chars);
 }
 
+//Filtering and removing extra characters
 function replaceAll(chars) {
   for ( var i=0;i<chars.length;i++) {
       for (var j=0;j<arr.length;j++) {
@@ -84,6 +85,7 @@ function replaceAll(chars) {
   appendDropDown(arr);
 }
 
+//Appending from volume name array to drop down
 function appendDropDown(arr) {
   var select = document.getElementById("selectVolume");
   for(var i = 0; i < arr.length; i++) {
@@ -96,7 +98,7 @@ function appendDropDown(arr) {
 
 }
 
-
+//Appending all the results to the main resultdiv 
 function appendData(resultdiv, data) {
   var count;
     for (var i = 0; i < data.length; i++) {
@@ -114,17 +116,12 @@ function appendData(resultdiv, data) {
           resultBox.append(link);
 				  if (data[i][j].highlight.content.length > 0) {
 					  for (var k = 0; k < data[i][j].highlight.content.length; k++) {
-						  // content.innerHTML += "<span>" + data[i][j].highlight.content[k] + "</span>";
               content.innerHTML += data[i][j].highlight.content[k];
               spanDiv.append(content);
               resultBox.append(spanDiv);
 					}
-          // spanDiv.append(content)
         resultdiv.append(resultBox);
 				}
-        // resultBox.append(spanDiv);
-        // resultdiv.append(resultBox);
-				// stop();
         }
         
         stop();
