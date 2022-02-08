@@ -5,7 +5,7 @@ import pprint
 import subprocess
 
 import elasticsearch
-
+import os
 import boto3
 from datetime import *
 from botocore.exceptions import ClientError
@@ -17,17 +17,25 @@ from elasticsearch import Elasticsearch, helpers
 
 def lambda_handler(event, context):
     print(context.invoked_function_arn)
-    secret_nct_nce_admin = get_secret('nct/nce/os/admin', 'us-east-2')
-    role = 'arn:aws:iam::514960042727:role/Lambda-os-search'
-    role_data = '{"backend_roles":["arn:aws:iam::514960042727:user/sarwikar","' + \
-        role + '"],"hosts": [],"users": ["automation"]}'
+    runtime_region = os.environ['AWS_REGION'] 
+    context_arn=context.invoked_function_arn
+    u_id=context_arn.split('-')[-1]
+    print('u_id',u_id)
+    account_id = boto3.client("sts").get_caller_identity()["Account"]
+    role = 'arn:aws:iam::'+account_id+':role/nasuni-labs-exec_role-SearchUI-'+u_id
+    
+    secret_nct_nce_admin = get_secret('nasuni-labs-os-admin', runtime_region)
+
+    
+    username = secret_nct_nce_admin['nac_es_admin_user']
+    role_data = '{"backend_roles":["' +role + '"],"hosts": [],"users": ["'+username+'"]}'
 
     print(role_data)
     with open("/tmp/" + "/data.json", "w") as write_file:
         write_file.write(role_data)
     link = secret_nct_nce_admin['nac_kibana_url']
     link = link[:link.index('_')]
-    username = secret_nct_nce_admin['nac_es_admin_user']
+
     password = secret_nct_nce_admin['nac_es_admin_password']
     data_file_obj = '/tmp/data.json'
     merge_link = '\"https://' + link + \
@@ -74,8 +82,7 @@ def search(es):
                 idx_content = i['_source'].get('content', 0)
                 idx_object_key = i['_source'].get('object_key', 0)
                 volume_name = i['_source'].get('volume_name', 0)
-                print('idx_object_key',idx_object_key)
-                print('volume_name',volume_name)
+                
                 if volume_name != 0: 
                     if not vol_list :
                         vol_list.append(volume_name)
