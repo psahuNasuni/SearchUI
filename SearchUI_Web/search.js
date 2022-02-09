@@ -18,6 +18,9 @@ searchbox.keyup(function () {
 function dropDownData(period) {
   volume = period;
   console.log(period);
+  if(searchbox.val()!=""){
+    search();
+  }
 }
 
 async function search() {
