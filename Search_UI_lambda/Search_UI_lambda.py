@@ -3,6 +3,7 @@ import json
 import logging
 import pprint
 import subprocess
+import os
 
 import elasticsearch
 
@@ -17,24 +18,25 @@ from elasticsearch import Elasticsearch, helpers
 
 
 def lambda_handler(event, context):
-    # aws_reg = event['Records'][0]['awsRegion']
-    # print(aws_reg)
-    # secret_data_internal = get_secret('nct-nce-internal-' + context.invoked_function_arn[76:], 'us-east-2')
     print(context.invoked_function_arn)
-    secret_nct_nce_admin = get_secret('nct/nce/os/admin', 'us-east-2')
-    role = 'arn:aws:iam::514960042727:role/service-role/SearchESIndexRole'
+    runtime_region = os.environ['AWS_REGION'] 
+    context_arn=context.invoked_function_arn
+    u_id=context_arn.split('-')[-1]
+    print('u_id',u_id)
+    account_id = boto3.client("sts").get_caller_identity()["Account"]
+    role = 'arn:aws:iam::'+account_id+':role/nasuni-labs-exec_role-SearchUI-'+u_id
     
-    # role = secret_data_internal['discovery_lambda_role_arn']
-    role_data = '{"backend_roles":["arn:aws:iam::514960042727:user/sarwikar","' + \
-        role + '"],"hosts": [],"users": ["automation"]}'
-    # data = '{\"backend_roles\":[\"arn:aws:iam::514960042727:user/ssa\"],\"hosts\": [],\"users\": [\"automation\",
-    # \"arn:aws:iam::514960042727:user/sarwikar\",\"' + role + '\"]}'
+    secret_nct_nce_admin = get_secret('nasuni-labs-os-admin', runtime_region)
+    
+    username = secret_nct_nce_admin['nac_es_admin_user']
+    role_data = '{"backend_roles":["' +role + '"],"hosts": [],"users": ["'+username+'"]}'
+
     print(role_data)
     with open("/tmp/" + "/data.json", "w") as write_file:
         write_file.write(role_data)
     link = secret_nct_nce_admin['nac_kibana_url']
     link = link[:link.index('_')]
-    username = secret_nct_nce_admin['nac_es_admin_user']
+
     password = secret_nct_nce_admin['nac_es_admin_password']
     data_file_obj = '/tmp/data.json'
     merge_link = '\"https://' + link + \
@@ -46,8 +48,8 @@ def lambda_handler(event, context):
     status, output = subprocess.getstatusoutput(cmd)
     print(output)
     print(link)
-    es = launch_es(secret_nct_nce_admin['nac_es_url'], 'us-east-2')
-    # search(es, '2021-12-01T09:17:45.274Z')
+    es = launch_es(secret_nct_nce_admin['nac_es_url'], runtime_region)
+
     resp = search(es, event)
     response = {
         "statusCode": 200,
@@ -56,12 +58,15 @@ def lambda_handler(event, context):
         },
         "isBase64Encoded": False
     }
+    print('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxx')
+    
     response['body'] = json.dumps(resp)
+    print(response['body']) 
     return response
 
 
 def launch_es(link, region):
-    # region = 'us-east-2'
+
     service = 'es'
     credentials = boto3.Session().get_credentials()
     print()
