@@ -13,7 +13,10 @@ variable "admin_secret" {
   default = "nasuni-labs-os-admin"
 }
 variable "internal_secret" {
-  default = "nac-es-internal"
+  default = ""
 }
-
+variable "stage_name" {
+  default = "dev"
+  description = "api stage name"
+}
 #########################################
