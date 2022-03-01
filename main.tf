@@ -292,7 +292,7 @@ resource "aws_iam_role_policy_attachment" "AmazonOpenSearchServiceReadOnlyAccess
 ################### START - API Gateway setup for Get Volume Lambda and Search ES Lambda ####################################################
 
 
-#Creating Rest API gateway
+### Creating Rest API gateway
 resource "aws_api_gateway_rest_api" "SearchES-API" {
   name        = "${local.resource_name_prefix}-${local.lambda_code_files}-${random_id.unique_SearchUI_id.dec}"
   description = "API created for exposing Lambda Functions for fetching Volumes and Search ES Data"
@@ -306,7 +306,7 @@ resource "aws_api_gateway_rest_api" "SearchES-API" {
 }
 ################### START - API Gateway setup for Get Volume Lambda ####################################################
 
-#Creating Resource for Rest API Gateway created
+### Creating Resource for Rest API Gateway created
 resource "aws_api_gateway_resource" "APIresourceForVolumeFetch" {
 
   path_part   = "es-volume"
@@ -317,7 +317,7 @@ depends_on = [
 ]
 }
 
-#Creating Method for API Gateway Created
+### Creating Method for API Gateway Created
 resource "aws_api_gateway_method" "APImethodForLambdaFunction" {
   rest_api_id   = aws_api_gateway_rest_api.SearchES-API.id
   resource_id   = aws_api_gateway_resource.APIresourceForVolumeFetch.id
@@ -328,7 +328,7 @@ depends_on = [
 ]
 }
 
-#Integrating the API Gateway with the Lambda function to deploy
+### Integrating the API Gateway with the Lambda function to deploy
 resource "aws_api_gateway_integration" "IntegratingLambdaFunctionWithAPIgateway" {
   rest_api_id             = aws_api_gateway_rest_api.SearchES-API.id
   resource_id             = aws_api_gateway_resource.APIresourceForVolumeFetch.id
@@ -338,11 +338,11 @@ resource "aws_api_gateway_integration" "IntegratingLambdaFunctionWithAPIgateway"
   uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${aws_lambda_function.lambda_function_get_es_volumes.arn}/invocations"
 
   request_templates = {
-    "application/xml" = <<EOF
-{
-   "body" : $input.json('$')
-}
-EOF
+    "application/json" = jsonencode(
+      {
+        statusCode = 200
+      }
+    )
   }
 depends_on = [
   aws_api_gateway_rest_api.SearchES-API,
@@ -354,7 +354,7 @@ depends_on = [
 
 
 
-#Specifying integration response of the lambda function with the API gateway for fetching volume
+### Specifying integration response of the lambda function with the API gateway for fetching volume
 resource "aws_api_gateway_integration_response" "APIintegrationResponseOfLambdafunction" {
   rest_api_id = aws_api_gateway_rest_api.SearchES-API.id
   resource_id = aws_api_gateway_resource.APIresourceForVolumeFetch.id
@@ -364,16 +364,24 @@ resource "aws_api_gateway_integration_response" "APIintegrationResponseOfLambdaf
   response_templates = {
     "application/json" = ""
   }
- 
+   response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+  }
+  depends_on = [
+    aws_api_gateway_method_response.APIgatewayMethodResponse
+  ]
 }
-#Specifying method response for integrating API gateway with Lambda function for fetching volume
+### Specifying method response for integrating API gateway with Lambda function for fetching volume
 resource "aws_api_gateway_method_response" "APIgatewayMethodResponse" {
   rest_api_id = aws_api_gateway_rest_api.SearchES-API.id
   resource_id = aws_api_gateway_resource.APIresourceForVolumeFetch.id
   http_method = aws_api_gateway_method.APImethodForLambdaFunction.http_method
-  status_code = "200"
+  status_code = 200
   response_models = {
     "application/json" = "Empty"
+  }
+      response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = true
   }
 }
 #Getting permission from Lambda function to API GAteway
@@ -384,6 +392,79 @@ resource "aws_lambda_permission" "apigw_lambda" {
   principal     = "apigateway.amazonaws.com"
   source_arn = "arn:aws:execute-api:${var.region}:514960042727:${aws_api_gateway_rest_api.SearchES-API.id}/${aws_api_gateway_stage.StageTheAPIdeployed.stage_name}/GET${aws_api_gateway_resource.APIresourceForVolumeFetch.path}"
 }
+
+#Enable Cors
+
+resource "aws_api_gateway_method" "CORSmethodForLambdaFunction" {
+  rest_api_id   = aws_api_gateway_rest_api.SearchES-API.id
+  resource_id   = aws_api_gateway_resource.APIresourceForVolumeFetch.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+depends_on = [
+  aws_api_gateway_method.CORSmethodForLambdaFunction,
+  aws_api_gateway_resource.APIresourceForVolumeFetch
+]
+}
+resource "aws_api_gateway_integration" "EnableCORSwithMock" {
+  rest_api_id             = aws_api_gateway_rest_api.SearchES-API.id
+  resource_id             = aws_api_gateway_resource.APIresourceForVolumeFetch.id
+  http_method             = aws_api_gateway_method.CORSmethodForLambdaFunction.http_method
+  type                    = "MOCK"
+  request_templates = {
+    "application/json" = jsonencode(
+      {
+        statusCode = 200
+      }
+    )
+  }
+depends_on = [
+  aws_api_gateway_rest_api.SearchES-API,
+  aws_api_gateway_resource.APIresourceForVolumeFetch,
+  aws_api_gateway_method.APImethodForLambdaFunction,
+  aws_api_gateway_method.CORSmethodForLambdaFunction,
+  aws_api_gateway_integration.IntegratingLambdaFunctionWithAPIgateway
+]
+}
+
+resource "aws_api_gateway_method_response" "APIgatewayMethodResponseCORS" {
+  rest_api_id = aws_api_gateway_rest_api.SearchES-API.id
+  resource_id = aws_api_gateway_resource.APIresourceForVolumeFetch.id
+  http_method = aws_api_gateway_method.CORSmethodForLambdaFunction.http_method
+  status_code = 200
+  response_models = {
+    "application/json" = "Empty"
+  }
+    response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true,
+    "method.response.header.Access-Control-Allow-Methods" = true,
+    "method.response.header.Access-Control-Allow-Origin"  = true
+  }
+  depends_on = [ aws_api_gateway_method.CORSmethodForLambdaFunction ]
+}
+
+resource "aws_api_gateway_integration_response" "rest_api_test_integration_response_CORS" {
+
+  rest_api_id       = "${aws_api_gateway_rest_api.SearchES-API.id}"
+  resource_id       = "${aws_api_gateway_resource.APIresourceForVolumeFetch.id}"
+  http_method       = "${aws_api_gateway_method.CORSmethodForLambdaFunction.http_method}"
+  status_code       = "${aws_api_gateway_method_response.APIgatewayMethodResponseCORS.status_code}"
+  selection_pattern = ""
+
+  response_templates = {
+    "application/json" = ""
+  }
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST'",
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+  }
+    depends_on = [
+    aws_api_gateway_integration.EnableCORSwithMock,
+    aws_api_gateway_method_response.APIgatewayMethodResponseCORS
+  ]
+}
+
 
 #Deploying the API created
 resource "aws_api_gateway_deployment" "APIdeploymentOfLambdaFunction" {
@@ -404,16 +485,18 @@ resource "aws_api_gateway_deployment" "APIdeploymentOfLambdaFunction" {
   depends_on = [
     aws_api_gateway_rest_api.SearchES-API,
     aws_api_gateway_integration.IntegratingLambdaFunctionWithAPIgateway,
-    aws_api_gateway_integration.IntegratingLambdaFunctionWithSearchUI
+    aws_api_gateway_integration.EnableCORSwithMock,
+    aws_api_gateway_method_response.APIgatewayMethodResponseCORS,
+    aws_api_gateway_integration.IntegratingLambdaFunctionWithSearchUI,
+    aws_api_gateway_integration.EnableCORSwithMockSearchUI,
+    aws_api_gateway_method_response.APIgatewayMethodResponseSearchUICORS    
+
   ]
 }
 
 ################### END - API Gateway setup for Get Volume Lambda ####################################################
 
-
-
-
-#Staging the Deployed API
+### Staging the Deployed API
 resource "aws_api_gateway_stage" "StageTheAPIdeployed" {
   deployment_id = aws_api_gateway_deployment.APIdeploymentOfLambdaFunction.id
   rest_api_id   = aws_api_gateway_rest_api.SearchES-API.id
@@ -433,7 +516,6 @@ depends_on = [
 ]
 }
 
-#Creating Method for Search UI
 resource "aws_api_gateway_method" "APImethodForSearchUI" {
   rest_api_id   = aws_api_gateway_rest_api.SearchES-API.id
   resource_id   = aws_api_gateway_resource.APIresourceForSearchUI.id
@@ -447,22 +529,20 @@ depends_on = [
 ]
 }
 
-
-#Integrating the API Gateway with the Lambda function to deploy Search UI
+### Integrating the API Gateway with the Lambda function to deploy Search UI
 resource "aws_api_gateway_integration" "IntegratingLambdaFunctionWithSearchUI" {
   rest_api_id             = aws_api_gateway_rest_api.SearchES-API.id
   resource_id             = aws_api_gateway_resource.APIresourceForSearchUI.id
   http_method             = aws_api_gateway_method.APImethodForSearchUI.http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${aws_lambda_function.lambda_function_search_es.arn}/invocations"
-
+    uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${aws_lambda_function.lambda_function_search_es.arn}/invocations"
   request_templates = {
-    "application/xml" = <<EOF
-{
-   "body" : $input.json('$')
-}
-EOF
+    "application/json" = jsonencode(
+      {
+        statusCode = 200
+      }
+    )
   }
 depends_on = [
   aws_api_gateway_rest_api.SearchES-API,
@@ -470,6 +550,19 @@ depends_on = [
   aws_api_gateway_method.APImethodForSearchUI
 ]
 
+}
+
+#Specifying integration response of the lambda function with the API gateway for fetching volume
+resource "aws_api_gateway_integration_response" "APIintegrationResponseOfLambdafunctionSearchUI" {
+  rest_api_id = aws_api_gateway_rest_api.SearchES-API.id
+  resource_id = aws_api_gateway_resource.APIresourceForSearchUI.id
+  http_method = aws_api_gateway_method.APImethodForSearchUI.http_method
+  status_code = aws_api_gateway_method_response.APIgatewaySearchUIMethodResponse.status_code
+
+  response_templates = {
+    "application/json" = ""
+  }
+ 
 }
 
 #Specifying method response for integrating API gateway with Search UI
@@ -483,6 +576,8 @@ resource "aws_api_gateway_method_response" "APIgatewaySearchUIMethodResponse" {
   }
 }
 
+
+
 #Getting permission from Lambda function to API GAteway
 resource "aws_lambda_permission" "apigw_lambdaSearchUI" {
   statement_id  = "${local.resource_name_prefix}-${local.lambda_code_files}-AllowExecutionFromAPIGatewayForSearchUI-${random_id.unique_SearchUI_id.dec}"
@@ -491,20 +586,82 @@ resource "aws_lambda_permission" "apigw_lambdaSearchUI" {
   principal     = "apigateway.amazonaws.com"
   source_arn = "arn:aws:execute-api:${var.region}:514960042727:${aws_api_gateway_rest_api.SearchES-API.id}/${aws_api_gateway_stage.StageTheAPIdeployed.stage_name}/GET${aws_api_gateway_resource.APIresourceForSearchUI.path}"
 }
-################### END - API Gateway setup for Search ES Lambda ####################################################
 
-resource "null_resource" "testing-api" {
-provisioner "local-exec" {
-        command = "sed -i 's#var volume_api.*$#var volume_api = \"${aws_api_gateway_deployment.APIdeploymentOfLambdaFunction.invoke_url}${aws_api_gateway_stage.StageTheAPIdeployed.stage_name}${aws_api_gateway_resource.APIresourceForVolumeFetch.path}\"; #g' SearchUI_Web/search.js"
+
+#Enable Cors for 
+
+resource "aws_api_gateway_method" "CORSmethodForLambdaFunctionUI" {
+  rest_api_id   = aws_api_gateway_rest_api.SearchES-API.id
+  resource_id   = aws_api_gateway_resource.APIresourceForSearchUI.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+depends_on = [
+  aws_api_gateway_resource.APIresourceForSearchUI
+]
+}
+resource "aws_api_gateway_integration" "EnableCORSwithMockSearchUI" {
+  rest_api_id             = aws_api_gateway_rest_api.SearchES-API.id
+  resource_id             = aws_api_gateway_resource.APIresourceForSearchUI.id
+  http_method             = aws_api_gateway_method.CORSmethodForLambdaFunctionUI.http_method
+  type                    = "MOCK"
+  request_templates = {
+    "application/json" = jsonencode(
+      {
+        statusCode = 200
+      }
+    )
   }
-provisioner "local-exec" {
-        command = "sed -i 's#var search_api.*$#var search_api = \"${aws_api_gateway_deployment.APIdeploymentOfLambdaFunction.invoke_url}${aws_api_gateway_stage.StageTheAPIdeployed.stage_name}${aws_api_gateway_resource.APIresourceForSearchUI.path}\"; #g' SearchUI_Web/search.js"
-   }
-provisioner "local-exec" {
-     command = "sudo service apache2 restart"
+depends_on = [
+  aws_api_gateway_rest_api.SearchES-API,
+  aws_api_gateway_resource.APIresourceForSearchUI,
+  aws_api_gateway_method.CORSmethodForLambdaFunctionUI,
+  aws_api_gateway_method.CORSmethodForLambdaFunctionUI,
+  aws_api_gateway_integration.IntegratingLambdaFunctionWithSearchUI
+]
+}
+
+
+resource "aws_api_gateway_method_response" "APIgatewayMethodResponseSearchUICORS" {
+  rest_api_id = aws_api_gateway_rest_api.SearchES-API.id
+  resource_id = aws_api_gateway_resource.APIresourceForSearchUI.id
+  http_method = aws_api_gateway_method.CORSmethodForLambdaFunctionUI.http_method
+  status_code = "200"
+  response_models = {
+    "application/json" = "Empty"
+  }
+    response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true,
+    "method.response.header.Access-Control-Allow-Methods" = true,
+    "method.response.header.Access-Control-Allow-Origin"  = true
   }
 
 }
+
+resource "aws_api_gateway_integration_response" "rest_api_test_integration_response_SearchUI_CORS" {
+
+  rest_api_id       = "${aws_api_gateway_rest_api.SearchES-API.id}"
+  resource_id       = "${aws_api_gateway_resource.APIresourceForSearchUI.id}"
+  http_method       = "${aws_api_gateway_method.CORSmethodForLambdaFunctionUI.http_method}"
+  status_code       = "${aws_api_gateway_method_response.APIgatewayMethodResponseSearchUICORS.status_code}"
+  selection_pattern = ""
+
+  response_templates = {
+    "application/json" = ""
+  }
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS'",
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+  }
+    depends_on = [
+    aws_api_gateway_integration.EnableCORSwithMockSearchUI,
+    aws_api_gateway_method_response.APIgatewayMethodResponseSearchUICORS
+  ]
+}
+
+
+################### END - API Gateway setup for Search ES Lambda ####################################################
 
 output "search_api_endpoint" {
   value = "${aws_api_gateway_deployment.APIdeploymentOfLambdaFunction.invoke_url}${aws_api_gateway_stage.StageTheAPIdeployed.stage_name}${aws_api_gateway_resource.APIresourceForSearchUI.path}"
@@ -514,5 +671,59 @@ output "volume_api_endpoint" {
   value = "${aws_api_gateway_deployment.APIdeploymentOfLambdaFunction.invoke_url}${aws_api_gateway_stage.StageTheAPIdeployed.stage_name}${aws_api_gateway_resource.APIresourceForVolumeFetch.path}"
 }
 
+################### START - Create API Gateway Response Object ####################################################
 
-################### END - API Gateway setup for Get Volume Lambda and Search ES Lambda ####################################################
+locals {
+  response_map = {
+    ACCESS_DENIED                  = 403
+    API_CONFIGURATION_ERROR        = 500
+    AUTHORIZER_CONFIGURATION_ERROR = 500
+    AUTHORIZER_FAILURE             = 500
+    BAD_REQUEST_PARAMETERS         = 400
+    BAD_REQUEST_BODY               = 400
+    DEFAULT_4XX                    = null
+    DEFAULT_5XX                    = null
+    EXPIRED_TOKEN                  = 403
+    INTEGRATION_FAILURE            = 504
+    INTEGRATION_TIMEOUT            = 504
+    INVALID_API_KEY                = 403
+    INVALID_SIGNATURE              = 403
+    MISSING_AUTHENTICATION_TOKEN   = 403
+    QUOTA_EXCEEDED                 = 429
+    REQUEST_TOO_LARGE              = 413
+    RESOURCE_NOT_FOUND             = 404
+    THROTTLED                      = 429
+    UNAUTHORIZED                   = 401
+    UNSUPPORTED_MEDIA_TYPE         = 415
+    WAF_FILTERED                   = 403
+  }
+}
+resource "aws_api_gateway_gateway_response" "response" {
+  for_each = local.response_map
+
+  rest_api_id   = aws_api_gateway_rest_api.SearchES-API.id
+  response_type = each.key
+  status_code   = each.value
+
+  response_templates = {
+    "application/json" = "{\"message\": $context.error.messageString}"
+  }
+    response_parameters = {
+    "gatewayresponse.header.Access-Control-Allow-Origin" = "'*'"
+  }
+}
+################### END - Create API Gateway Response Object ####################################################
+
+
+resource "null_resource" "update_search_js" {
+provisioner "local-exec" {
+        command = "sed -i 's#var volume_api.*$#var volume_api = \"${aws_api_gateway_deployment.APIdeploymentOfLambdaFunction.invoke_url}${aws_api_gateway_stage.StageTheAPIdeployed.stage_name}${aws_api_gateway_resource.APIresourceForVolumeFetch.path}\"; #g' SearchUI_Web/search.js"
+  }
+provisioner "local-exec" {
+        command = "sed -i 's#var search_api.*$#var search_api = \"${aws_api_gateway_deployment.APIdeploymentOfLambdaFunction.invoke_url}${aws_api_gateway_stage.StageTheAPIdeployed.stage_name}${aws_api_gateway_resource.APIresourceForSearchUI.path}\"; #g' SearchUI_Web/search.js"
+   }
+provisioner "local-exec" {
+     command = "sudo service apache2 restart"
+  }
+depends_on = [aws_api_gateway_rest_api.SearchES-API]
+}

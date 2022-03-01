@@ -1,6 +1,6 @@
 // Update this variable to point to your domain.
-var search_api = 'https://hlh4mflagg.execute-api.us-east-2.amazonaws.com/prod/SearchESIndex';
-var volume_api = 'https://2w966j6thk.execute-api.us-east-2.amazonaws.com/dev/nmc-volumes';
+var search_api = 'https://vvi2lcdn3c.execute-api.us-east-2.amazonaws.com/dev/search-es';
+var volume_api = 'https://vvi2lcdn3c.execute-api.us-east-2.amazonaws.com/dev/es-volume';
 var loadingdiv = $('#loading');
 var noresults = $('#noresults');
 var resultdiv = $('#results');
