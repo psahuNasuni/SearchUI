@@ -10,7 +10,7 @@ var arr = [];
 var responseArr = [];
 var volume;
 let pagiResults=1;
-var dataLen=3;
+var dataLen=4;
 var index=0;
 var numArr = []
 // var i =0;
@@ -168,13 +168,17 @@ function appendData(resultdiv, data) {
     
     }
     if(data.length>0&&pagiResults>0){
-      var totalPages=Math.round(data.length/dataLen);
+      var totalPages=data.length/dataLen;
       console.log(totalPages+"=============");
+      if(totalPages % 1 != 0){
+        totalPages = Math.trunc(totalPages+1)
+      }
       if(pagiResults<totalPages){
         var page = Number(pagiResults);
       }else if (pagiResults==totalPages){
         var page = totalPages;
       }
+      console.log(page+"   ::::::::::::::::::::::::")
         
       
       var paginationDiv = document.getElementById('pagination');

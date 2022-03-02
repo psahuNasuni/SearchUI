@@ -24,6 +24,10 @@ function createPagination(totalPages, page){
     beforePage = beforePage - 1;
   } 
 
+  if(beforePage<0){
+    beforePage=Math.abs(beforePage)
+  }
+
   // how many pages or li show after the current li
   if (page == 1) {
     afterPage = afterPage + 2;
@@ -32,6 +36,7 @@ function createPagination(totalPages, page){
   }
 
   for (var plength = beforePage; plength <= afterPage; plength++) {
+    console.log(beforePage +"////////////////")
     if (plength > totalPages) { //if plength is greater than totalPage length then continue
       continue;
     }
@@ -47,6 +52,7 @@ function createPagination(totalPages, page){
       liTag += `<li class="numb ${active}" id="numb" onclick="createPagination(totalPages, ${plength})"><span class="activeSpan" onclick="paginationData(${plength});">${plength}</span></li>`;
     }
     // liTag += `<li class="numb ${active}" id="numb" onclick="createPagination(totalPages, ${plength})"><span class="activeSpan" onclick="paginationData(${plength});">${plength}</span></li>`;
+  console.log(plength+"....................")
   }
 
   if(page <= totalPages){ //if page value is less than totalPage value by -1 then show the last li or page
