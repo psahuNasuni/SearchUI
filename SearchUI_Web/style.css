@@ -1,15 +1,64 @@
 /* body {
-	background-color: #8EC5FC;
-background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
-} */
+	/* background-color: #8EC5FC; */
+/* background-image: url("paper.png");
+background-repeat: no-repeat;
+background-size: cover; */
+/* } */ 
 
-h1 {
-	font-size: 35px;
+.body-bg {
+	background-image: url("paper.png");
+	/* min-height: 100%; */
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-position: center;
+	/* background-size: cover; */
+opacity: 0.5;
+overflow:auto;
+  position: absolute;
+  /* left: inherit;
+  top: inherit; */
+  /* height:100%; */
+  width: 100%;
+
+}
+
+.logo {
+	padding: 5px;
+	margin: auto;
+	position: relative;
+	font-size: 1.25rem;
+    line-height: inherit;
+    white-space: nowrap;
+	border-style: none;
+	overflow:auto;
+}
+
+header {
+	/* background-color:rgba(86,166,68,255) ; */
+	overflow: hidden;
+	width: 100%;
+	height: 30%;
+}
+
+footer {
+	position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  /* background-color: red; */
+  color: white;
+  text-align: center; 
+}
+
+.bodyContainer {
+	height: 70%;
+	overflow: hidden;
 }
 
 .container {
 	align-items: center;
 	height:100vh;
+	height: 30%;
 }
 
 .search-panel {
@@ -30,6 +79,7 @@ h1 {
 	padding: 0 5px;
 	border-top-left-radius: 5px;
 	border-bottom-left-radius: 5px;
+	background-color: white;
 }
 
 .select-box {
@@ -56,7 +106,7 @@ option:hover {
   }
 
   #results h5{
-	margin-bottom: 5p
+	margin-bottom: 5p;
   }
 
 .result-status {
@@ -68,6 +118,7 @@ option:hover {
 .result-box {
 	border-top: 1px solid grey;
 	margin-top: 30px;
+	/* background-color: rgb(90, 177, 90); */
 }
 
 .result-box:last-child {
@@ -90,6 +141,7 @@ option:hover {
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
 	font-weight: normal;
+	font-family: sans-serif;
 }
 
 

@@ -1,13 +1,19 @@
 // Update this variable to point to your domain.
-var apigatewayendpoint = 'https://hlh4mflagg.execute-api.us-east-2.amazonaws.com/prod/SearchESIndex';
-var volume_api = 'https://2w966j6thk.execute-api.us-east-2.amazonaws.com/dev/nmc-volumes';
+var apigatewayendpoint = 'https://u1swlszspg.execute-api.us-east-2.amazonaws.com/dev/search-es';
+var volume_api = 'https://u1swlszspg.execute-api.us-east-2.amazonaws.com/dev/es-volume';
 var loadingdiv = $('#loading');
 var noresults = $('#noresults');
 var resultdiv = $('#results');
 var searchbox = $('input#search');
 var timer = 0;
 var arr = [];
+var responseArr = [];
 var volume;
+var pagiResults=0;
+var dataLen=3;
+var index=0;
+var numArr = []
+// var i =0;
 
 // Executes the search function 250 milliseconds after user stops typing
 searchbox.keyup(function () {
@@ -18,9 +24,12 @@ searchbox.keyup(function () {
 function dropDownData(period) {
   volume = period;
   console.log(period);
-  if(searchbox.val()!=""){
-    search();
-  }
+}
+
+function paginationData(period) {
+  pagiResults = period;
+  console.log(pagiResults+"   pagination page number");
+  indexChange();
 }
 
 async function search() {
@@ -56,7 +65,8 @@ async function search() {
       noresults.hide();
       // Iterate through the results and write them to HTML
       resultdiv.append('<p class="result-status">Found ' + response_data.length + ' results.</p>');
-      appendData(resultdiv,response_data);
+      responseArr = response_data;
+      appendData(resultdiv,responseArr);
   } else {
     noresults.show();
   }
@@ -101,10 +111,25 @@ function appendDropDown(arr) {
 
 }
 
+
+function indexChange(){
+  for(var x = 0;x<pagiResults;x++){
+    var y = x*dataLen;
+    numArr.push(y);
+  }
+  numArr= [...new Set(numArr)]
+  index = numArr[pagiResults-1]
+  noresults.hide();
+  resultdiv.empty();
+  loadingdiv.hide();
+  appendData(resultdiv,responseArr);
+ 
+}
+
 //Appending all the results to the main resultdiv 
 function appendData(resultdiv, data) {
-  var count;
-    for (var i = 0; i < data.length; i++) {
+  console.log("dataLen" + dataLen)
+    for (var i=index; i < dataLen+index; i++) {
         var link = document.createElement("h5");
         var content = document.createElement("span");
         var resultBox = document.createElement("div");
@@ -120,10 +145,12 @@ function appendData(resultdiv, data) {
 				  if (data[i][j].highlight.content.length > 0) {
 					  for (var k = 0; k < data[i][j].highlight.content.length; k++) {
               content.innerHTML += data[i][j].highlight.content[k];
+              
               spanDiv.append(content);
               resultBox.append(spanDiv);
 					}
         resultdiv.append(resultBox);
+        
 				}
         }
         
@@ -131,5 +158,13 @@ function appendData(resultdiv, data) {
 			
 		}
     
+    }
+    if(data.length>1){
+      var totalPages=Math.round(data.length/dataLen);
+      var page =1
+      var paginationDiv = document.getElementById('pagination');
+        var ul = document.createElement('ul')
+        paginationDiv.append(ul);
+        createPagination(totalPages, page);
     }
 }
