@@ -30,9 +30,10 @@ function paginationData(period) {
   if(period>0){
     pagiResults = period;
     console.log(pagiResults+"   pagination page number");
-  }
   
   indexChange();
+  }
+    
 }
 
 async function search() {
@@ -166,12 +167,15 @@ function appendData(resultdiv, data) {
 		}
     
     }
-    if(data.length>0){
+    if(data.length>0&&pagiResults>0){
       var totalPages=Math.round(data.length/dataLen);
-      console.log(totalPages+"=============")
-      if(pagiResults>0){
-        var page = Number(pagiResults)
+      console.log(totalPages+"=============");
+      if(pagiResults<totalPages){
+        var page = Number(pagiResults);
+      }else if (pagiResults==totalPages){
+        var page = totalPages;
       }
+        
       
       var paginationDiv = document.getElementById('pagination');
         var ul = document.createElement('ul')
