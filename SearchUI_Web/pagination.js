@@ -1,6 +1,8 @@
+// selecting required element
 const element = document.getElementById("pagination");
 // let totalPages = 20;
 // let page = 10;
+
 //calling function with passing parameters and adding inside element which is ul tag
 // element.innerHTML = createPagination(totalPages, page);
 function createPagination(totalPages, page){
@@ -10,11 +12,12 @@ function createPagination(totalPages, page){
   let afterPage = page + 1;
 
   if(page > 2){ //if page value is less than 2 then add 1 after the previous button
-    liTag += `<li class="first numb" id="numb"  onclick="createPagination(totalPages, 1)"><span onclick="paginationData(1)">1</span></li>`;
+    liTag += `<li class="first numb" id="numb" onclick="createPagination(totalPages, 1)"><span onclick="paginationData(1)">1</span></li>`;
     if(page > 3){ //if page value is greater than 3 then add this (...) after the first li or page
       liTag += `<li class="dots"><span>...</span></li>`;
     }
   }
+
   // how many pages or li show before the current li
   if (page == totalPages) {
     beforePage = beforePage - 2;
@@ -27,11 +30,10 @@ function createPagination(totalPages, page){
   } else if (page == 2) {
     afterPage  = afterPage + 1;
   }
-  for (var plength = beforePage; plength < afterPage; plength++) {
+
+  for (var plength = beforePage; plength <= afterPage; plength++) {
     if (plength > totalPages) { //if plength is greater than totalPage length then continue
       continue;
-    }else{
-      stop(); 
     }
     if (plength == 0) { //if plength is 0 than add +1 in plength value
       plength = plength + 1;
@@ -41,24 +43,24 @@ function createPagination(totalPages, page){
     }else{ //else leave empty to the active variable
       active = "";
     }
-
-    console.log(page+".................")
-    if(plength!=totalPages){
-      liTag += `<li class="numb ${active}" id="numb" onclick="createPagination(totalPages, ${plength});"><span class="activeSpan" onclick="paginationData(${plength});">${plength}</span></li>`;
+    if (plength<totalPages){
+      liTag += `<li class="numb ${active}" id="numb" onclick="createPagination(totalPages, ${plength})"><span class="activeSpan" onclick="paginationData(${plength});">${plength}</span></li>`;
     }
+    // liTag += `<li class="numb ${active}" id="numb" onclick="createPagination(totalPages, ${plength})"><span class="activeSpan" onclick="paginationData(${plength});">${plength}</span></li>`;
   }
+
   if(page < totalPages - 1){ //if page value is less than totalPage value by -1 then show the last li or page
-    // if(page < totalPages - 2){ //if page value is less than totalPage value by -2 then add this (...) before the last li or page
-    //   liTag += `<li class="dots"><span>...</span></li>`;
-    // }
-    liTag += `<li class="last numb" id="numb" onclick="createPagination(totalPages, ${totalPages})"><span onclick="paginationData(${totalPages})">${totalPages}</span></li>`;
+    if(page < totalPages - 2){ //if page value is less than totalPage value by -2 then add this (...) before the last li or page
+      liTag += `<li class="dots"><span>...</span></li>`;
+    }
+    liTag += `<li class="last numb" onclick="createPagination(totalPages, ${totalPages})"><span onclick="paginationData(${totalPages})">${totalPages}</span></li>`;
   }
-  // if (page < totalPages) { //show the next button if the page value is less than totalPage(20)
-  //   liTag += `<li class="btn next" onclick="createPagination(totalPages, ${page + 1})"><span>Next <i class="fas fa-angle-right"></i></span></li>`;
-  // }
-  // console.log("active number" + active)
+
+  if (page < totalPages) { //show the next button if the page value is less than totalPage(20)
+    liTag += `<li class="btn next" onclick="createPagination(totalPages, ${page + 1})"><span>Next <i class="fas fa-angle-right"></i></span></li>`;
+  }
   element.innerHTML = liTag; //add li tag inside ul tag
 
   return liTag; //reurn the li tag
   
-}   
+}
