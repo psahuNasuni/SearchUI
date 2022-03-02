@@ -9,8 +9,8 @@ var timer = 0;
 var arr = [];
 var responseArr = [];
 var volume;
-var pagiResults=0;
-var dataLen=3;
+let pagiResults=1;
+var dataLen=2;
 var index=0;
 var numArr = []
 // var i =0;
@@ -120,11 +120,11 @@ function indexChange(){
   numArr= [...new Set(numArr)]
   // console.log()
   index = numArr[pagiResults-1]
-  
-  // resultdiv.append('<p class="result-status">Found ' + responseArr.length + ' results.</p>');
+  resultdiv.empty();
+  resultdiv.append('<p class="result-status">Found ' + responseArr.length + ' results.</p>');
   console.log(numArr+" this is new numArr");
   noresults.hide();
-  resultdiv.empty();
+  
   loadingdiv.hide();
   appendData(resultdiv,responseArr);
  
@@ -140,7 +140,7 @@ function appendData(resultdiv, data) {
         var spanDiv = document.createElement('div');
         resultBox.classList.add("result-box");
         spanDiv.classList.add("result-content");
-		
+		console.log(data[i].length+"111111111111111")
 		if (data[i].length > 0) {
       
 			for (var j = 0; j < data[i].length; j++) {
@@ -163,10 +163,10 @@ function appendData(resultdiv, data) {
 		}
     
     }
-    if(data.length>1){
+    if(data.length>0){
       var totalPages=Math.round(data.length/dataLen);
       console.log(totalPages+"=============")
-      var page =1
+      let page = Number(pagiResults)
       var paginationDiv = document.getElementById('pagination');
         var ul = document.createElement('ul')
         paginationDiv.append(ul);
