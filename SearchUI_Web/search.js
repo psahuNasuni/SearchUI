@@ -10,7 +10,7 @@ var arr = [];
 var responseArr = [];
 var volume;
 let pagiResults=1;
-var dataLen=4;
+var dataLen=3;
 var index=0;
 var numArr = []
 // var i =0;
@@ -27,8 +27,11 @@ function dropDownData(period) {
 }
 
 function paginationData(period) {
-  pagiResults = period;
-  console.log(pagiResults+"   pagination page number");
+  if(period>0){
+    pagiResults = period;
+    console.log(pagiResults+"   pagination page number");
+  }
+  
   indexChange();
 }
 
@@ -140,7 +143,7 @@ function appendData(resultdiv, data) {
         var spanDiv = document.createElement('div');
         resultBox.classList.add("result-box");
         spanDiv.classList.add("result-content");
-		console.log(data[i].length+"111111111111111")
+		
 		if (data[i].length > 0) {
       
 			for (var j = 0; j < data[i].length; j++) {
@@ -166,7 +169,10 @@ function appendData(resultdiv, data) {
     if(data.length>0){
       var totalPages=Math.round(data.length/dataLen);
       console.log(totalPages+"=============")
-      let page = Number(pagiResults)
+      if(pagiResults>0){
+        var page = Number(pagiResults)
+      }
+      
       var paginationDiv = document.getElementById('pagination');
         var ul = document.createElement('ul')
         paginationDiv.append(ul);

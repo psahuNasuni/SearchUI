@@ -35,6 +35,9 @@ function createPagination(totalPages, page){
     if (plength > totalPages) { //if plength is greater than totalPage length then continue
       continue;
     }
+    if (plength<0){
+      plength +=2;
+    }
     if (plength == 0) { //if plength is 0 than add +1 in plength value
       plength = plength + 1;
     }
