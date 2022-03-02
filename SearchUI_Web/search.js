@@ -10,7 +10,7 @@ var arr = [];
 var responseArr = [];
 var volume;
 let pagiResults=1;
-var dataLen=2;
+var dataLen=4;
 var index=0;
 var numArr = []
 // var i =0;
