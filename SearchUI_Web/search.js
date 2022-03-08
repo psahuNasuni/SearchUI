@@ -1,6 +1,6 @@
 // Update this variable to point to your domain.
-var apigatewayendpoint = 'https://u1swlszspg.execute-api.us-east-2.amazonaws.com/dev/search-es';
-var volume_api = 'https://u1swlszspg.execute-api.us-east-2.amazonaws.com/dev/es-volume';
+var apigatewayendpoint = 'https://fpjqler4n6.execute-api.us-east-2.amazonaws.com/dev/search-es';
+var volume_api = 'https://fpjqler4n6.execute-api.us-east-2.amazonaws.com/dev/es-volume';
 var loadingdiv = $('#loading');
 var noresults = $('#noresults');
 var resultdiv = $('#results');
