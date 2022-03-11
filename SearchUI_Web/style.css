@@ -1,11 +1,3 @@
-/* body {
-	/* background-color: #8EC5FC; */
-/* background-image: url("paper.png");
-background-repeat: no-repeat;
-background-size: cover; */
-/* } */ 
-
-
 .body-bg {
 	opacity: 0.6;
   position: fixed;
@@ -45,14 +37,11 @@ footer {
   left: 0;
   bottom: 0;
   width: 100%;
-  /* background-color: red; */
   color: white;
   text-align: center; 
 }
 
 .bodyContainer {
-	/* position: fixed; */
-	/* top: 5%; */
 	height: 95vh;
 	width: 100%	;
 	overflow: auto;
@@ -63,7 +52,7 @@ footer {
 	position: absolute;
 	
 	top:10%;
-	left:15%;
+	left:18%;
 }
 
 .container::after{
@@ -122,14 +111,12 @@ option:hover {
 .result-status {
 	margin:10px 0;
 	font-size: 14px;
-	/* text-decoration: none; */
 }
 
 .result-box {
 	border-top: 1px solid grey;
 	margin-top: 30px;
 	overflow: sc;
-	/* background-color: rgb(90, 177, 90); */
 }
 
 

@@ -5,14 +5,7 @@
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
-body{
-  /* display: flex;
-  align-items: center; */
-  /* justify-content: center; */
-  /* background: #20B2AA;
-  min-height: 100vh;
-  padding: 10px; */
-}
+
 .pagination ul{
   width: 70%;
   height: 7%;
@@ -26,7 +19,7 @@ body{
   left:10%;
 
   background-color: red;
-  /* border-color: #337ab7; */
+  
 }
 .pagination ul li{
     height:6%;
@@ -55,6 +48,7 @@ body{
 }
 .pagination ul li.numb.last{
   margin: 0px -5px 0 3px;
+  background-color: #337ab7;
 }
 .pagination ul li.dots{
   font-size: 22px;
@@ -74,25 +68,18 @@ body{
 }
 
 .pagination ul li:first-child:hover,
-.pagination ul li:last-child:hover{
+.pagination ul li:last-child:after{
   color: #fff;
   background-color: red;
 }
 
-.pagination .firstSpan:active{
-  background-color: red;
-  }
-
-.pagination .activeSpan:active{
-background-color: red;
-}
-.pagination .activeSpan::after{
-  background-color: red;
-  }
-  .pagination .lastSpan:active{
-    background-color: red;
+.pagination .firstSpan:active,
+.pagination .activeSpan:active,
+.pagination .activeSpan::after,
+  .pagination .lastSpan::after{
+    background-color: white;
     }
 
-/* .activeSpan {
+.activeSpan {
   background-color: red;
-} */
+}
