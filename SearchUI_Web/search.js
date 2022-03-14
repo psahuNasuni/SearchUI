@@ -23,9 +23,9 @@ searchbox.keyup(function() {
 function dropDownData(period) {
     volume = period;
     console.log(period);
-    if(volume!=""){
-        search()
-    }
+    if(searchbox.val()!=""){
+        search();
+      }
 }
 
 function paginationData(period) {
