@@ -23,6 +23,9 @@ searchbox.keyup(function() {
 function dropDownData(period) {
     volume = period;
     console.log(period);
+    if(volume!=""){
+        search()
+    }
 }
 
 function paginationData(period) {
@@ -106,7 +109,6 @@ function appendDropDown(arr) {
         el.value = opt;
         select.appendChild(el);
     }
-
 }
 
 
