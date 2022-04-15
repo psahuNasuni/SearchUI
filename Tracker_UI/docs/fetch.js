@@ -59,8 +59,11 @@ function tableAppend(result,volumes) {
                     var listSchedule = document.createTextNode(source[i]._source.frequency);
                     newCell.appendChild(listSchedule);
                 }else{
-                    var listVolumes = document.createTextNode(volumes[i]);
-                    newCell.appendChild(listVolumes);
+                    var a = document.createElement('a');
+                    var link = document.createTextNode(source[i]._source.volume);
+                    a.appendChild(link)
+                    a.href=source[i]._source.default_url
+                    newCell.appendChild(a);
                 }
                 
             }
