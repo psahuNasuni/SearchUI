@@ -1,6 +1,6 @@
 // Update this variable to point to your domain.
-var apigatewayendpoint = 'https://5ye4be6w73.execute-api.us-east-2.amazonaws.com/dev/search-es';
-var volume_api = 'https://5ye4be6w73.execute-api.us-east-2.amazonaws.com/dev/es-volume';
+var apigatewayendpoint = 'https://jrol9tzdwc.execute-api.us-east-2.amazonaws.com/dev/search-es';
+var volume_api = 'https://jrol9tzdwc.execute-api.us-east-2.amazonaws.com/dev/es-volume';
 var loadingdiv = $('#loading');
 var noresults = $('#noresults');
 var resultdiv = $('#results');
@@ -9,6 +9,7 @@ var timer = 0;
 var arr = [];
 var responseArr = [];
 var volume;
+var volSelect;
 let pagiResults = 1;
 var dataLen = 3;
 var index = 0;
@@ -21,6 +22,7 @@ searchbox.keyup(function() {
 });
 
 function dropDownData(period) {
+    volSelect=""
     volume = period;
     console.log(period);
     if(searchbox.val()!=""){
@@ -78,6 +80,17 @@ async function search() {
 
 //Iterate volume names from API to drop down menu
 async function start() {
+    const urlParams = new URLSearchParams(location.search);
+    volSelect=  urlParams.get('q');
+    if(volSelect!=null){
+        volume = volSelect
+        document.getElementById("defVal").value=volSelect
+        document.getElementById("defVal").innerText=volSelect
+    }else{
+        document.getElementById("defVal").value="none"
+        document.getElementById("defVal").innerText="Select Volume"
+    }
+    console.log(volSelect)
     response = await $.get(volume_api, 'json');
     arr = response.split(",");
     var chars = ['[', ']', '\\', '"'];
@@ -101,14 +114,21 @@ function replaceAll(chars) {
 
 //Appending from volume name array to drop down
 function appendDropDown(arr) {
-    var select = document.getElementById("selectVolume");
+
+
+    var selectOpt = document.getElementById("selectVolume");
+    
+    console.log(volSelect)
+    
     for (var i = 0; i < arr.length; i++) {
         var opt = arr[i];
         var el = document.createElement("option");
+        
+        
         el.textContent = opt;
         el.value = opt;
-        select.appendChild(el);
-    }
+        selectOpt.appendChild(el);
+    }    
 }
 
 

@@ -34,7 +34,6 @@ function trackerStart(){
 
         
     });
-    console.log(data)
 }
 
 function tableAppend(result,volumes) {
@@ -60,9 +59,13 @@ function tableAppend(result,volumes) {
                     newCell.appendChild(listSchedule);
                 }else{
                     var a = document.createElement('a');
+                    let button = document.createElement('button');
                     var link = document.createTextNode(source[i]._source.volume);
+                    a.setAttribute("id","anchor");
+                    button.appendChild(a)
                     a.appendChild(link)
-                    a.href=source[i]._source.default_url
+                    a.href=source[i]._source.default_url+"?q="+source[i]._source.volume
+                    a.target = "_blank"
                     newCell.appendChild(a);
                 }
                 
