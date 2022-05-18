@@ -47,7 +47,7 @@ def lambda_handler(event, context):
     status, output = subprocess.getstatusoutput(cmd)
     print(output)
     print(link)
-    es = launch_es(secret_nct_nce_admin['nac_es_url'], 'us-east-2')
+    es = launch_es(secret_nct_nce_admin['nac_es_url'], runtime_region)
     resp = search(es)
     response = {
         "statusCode": 200,
