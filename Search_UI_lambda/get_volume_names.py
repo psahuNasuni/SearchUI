@@ -28,6 +28,7 @@ def lambda_handler(event, context):
 
     
     username = secret_nct_nce_admin['nac_es_admin_user']
+    secret_es_region = secret_nct_nce_admin['es_region']
     role_data = '{"backend_roles":["' +role + '"],"hosts": [],"users": ["'+username+'"]}'
 
     print(role_data)
@@ -47,7 +48,7 @@ def lambda_handler(event, context):
     status, output = subprocess.getstatusoutput(cmd)
     print(output)
     print(link)
-    es = launch_es(secret_nct_nce_admin['nac_es_url'], runtime_region)
+    es = launch_es(secret_nct_nce_admin['nac_es_url'], secret_es_region)
     resp = search(es)
     response = {
         "statusCode": 200,
