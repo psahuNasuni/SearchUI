@@ -1,7 +1,7 @@
 // Update this variable to point to your domain.
 // var apigatewayendpoint = 'https://jrol9tzdwc.execute-api.us-east-2.amazonaws.com/dev/search-es';
 // var volume_api = 'https://jrol9tzdwc.execute-api.us-east-2.amazonaws.com/dev/es-volume';
-var apigatewayendpoint = '';
+var search_api = '';
 var volume_api = '';
 var loadingdiv = $('#loading');
 var noresults = $('#noresults');
@@ -62,7 +62,7 @@ async function search() {
     // Only run a query if the string contains at least three characters
     if (query.length > 0) {
         // Make the HTTP request with the query as a parameter and wait for the JSON results
-        let response_data = await $.get(apigatewayendpoint, { q: query, size: 25 }, 'json');
+        let response_data = await $.get(search_api, { q: query, size: 25 }, 'json');
         console.log(response_data);
 
         // Get the part of the JSON response that we care about
