@@ -297,6 +297,14 @@ resource "aws_iam_role_policy_attachment" "AmazonOpenSearchServiceReadOnlyAccess
   role       = aws_iam_role.lambda_exec_role.name
   policy_arn = data.aws_iam_policy.AmazonOpenSearchServiceReadOnlyAccess.arn
 }
+data "aws_iam_policy" "AWSLambdaVPCAccessExecutionRole" {
+  arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+}
+
+resource "aws_iam_role_policy_attachment" "AWSLambdaVPCAccessExecutionRole" {
+  role       = aws_iam_role.lambda_exec_role.name
+  policy_arn = data.aws_iam_policy.AWSLambdaVPCAccessExecutionRole.arn
+}
 
 ################### END - Lambda Role and Policies  ####################################################
 
