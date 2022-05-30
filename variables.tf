@@ -1,5 +1,12 @@
 
 ################### Lambda Provisioning Specific Variables ###################
+variable "user_vpc_id" {
+  default = ""
+}
+
+variable "user_subnet_id" {
+  default = ""
+}
 variable "runtime" {
   default = "python3.6"
 }
