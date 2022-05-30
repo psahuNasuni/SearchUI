@@ -21,6 +21,12 @@ data "archive_file" "lambda_zip" {
 }
 ################### START - Search_UI_lambda Lambda ####################################################
 
+ata "aws_security_groups" "es" {
+  filter {
+    name   = "vpc-id"
+    values = [var.user_vpc_id]
+  }
+}
 resource "aws_lambda_function" "lambda_function_search_es" {
   role             = aws_iam_role.lambda_exec_role.arn
   handler          = "${local.lambda_code_file_name_SearchUI}.${local.handler}"
@@ -30,7 +36,10 @@ resource "aws_lambda_function" "lambda_function_search_es" {
 
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
   timeout          = 20
-
+  vpc_config {
+      security_group_ids = [data.aws_security_groups.es.ids[0]]
+      subnet_ids         = [var.user_subnet_id]
+  }
   tags = {
     Name            = "${local.resource_name_prefix}-${local.lambda_code_file_name_SearchUI}-${random_id.unique_SearchUI_id.dec}"
     Application     = "Nasuni Analytics Connector with Elasticsearch"
@@ -58,7 +67,10 @@ resource "aws_lambda_function" "lambda_function_get_es_volumes" {
   function_name    = "${local.resource_name_prefix}-${local.lambda_code_file_name_NMC_VOL}-${random_id.unique_SearchUI_id.dec}"
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
   timeout          = 20
-
+  vpc_config {
+      security_group_ids = [data.aws_security_groups.es.ids[0]]
+      subnet_ids         = [var.user_subnet_id]
+  }
   tags = {
     Name            = "${local.resource_name_prefix}-${local.lambda_code_file_name_NMC_VOL}-${random_id.unique_SearchUI_id.dec}"
     Application     = "Nasuni Analytics Connector with Elasticsearch"
