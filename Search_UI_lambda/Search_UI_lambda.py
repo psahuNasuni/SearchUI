@@ -26,7 +26,7 @@ def lambda_handler(event, context):
     account_id = boto3.client("sts").get_caller_identity()["Account"]
     role = 'arn:aws:iam::'+account_id+':role/nasuni-labs-exec_role-SearchUI-'+u_id
     
-    secret_nct_nce_admin = get_secret('nasuni-labs-os-admin', runtime_region)
+    secret_nct_nce_admin = get_secret('nasuni-labs-os-admin-2', runtime_region)
     
     username = secret_nct_nce_admin['nac_es_admin_user']
     secret_es_region = secret_nct_nce_admin['es_region']
