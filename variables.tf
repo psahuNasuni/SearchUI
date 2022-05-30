@@ -10,7 +10,7 @@ variable "aws_profile" {
   default = "nasuni"
 }
 variable "admin_secret" {
-  default = "nasuni-labs-os-admin"
+  default = "nasuni-labs-os-admin-2"
 }
 variable "internal_secret" {
   default = ""
