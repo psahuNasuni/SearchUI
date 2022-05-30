@@ -21,7 +21,7 @@ data "archive_file" "lambda_zip" {
 }
 ################### START - Search_UI_lambda Lambda ####################################################
 
-ata "aws_security_groups" "es" {
+data "aws_security_groups" "es" {
   filter {
     name   = "vpc-id"
     values = [var.user_vpc_id]
