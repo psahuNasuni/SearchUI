@@ -58,7 +58,7 @@ def lambda_handler(event, context):
         "isBase64Encoded": False
     }
     response['body'] = json.dumps(resp)
-    return response['body']
+    return response
 
 
 def launch_es(link, region):
