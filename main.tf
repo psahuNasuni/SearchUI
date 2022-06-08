@@ -344,17 +344,17 @@ resource "aws_api_gateway_rest_api_policy" "SearchES-API-policy" {
         {
             "Effect": "Allow",
             "Principal": "*",
-            "Action": "execute-api-nasuni:Invoke",
+            "Action": "execute-api:Invoke",
             "Resource": [
-              "execute-api-nasuni:/*"
+              "execute-api:/*"
             ]
         },
         {
             "Effect": "Deny",
             "Principal": "*",
-            "Action": "execute-api-nasuni:Invoke",
+            "Action": "execute-api:Invoke",
             "Resource": [
-              "execute-api-nasuni:/*"
+              "execute-api:/*"
             ],
             "Condition" : {
                 "StringNotEquals": {
