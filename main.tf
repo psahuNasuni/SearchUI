@@ -312,7 +312,7 @@ resource "aws_iam_role_policy_attachment" "AWSLambdaVPCAccessExecutionRole" {
 ################### START - API Gateway setup for Get Volume Lambda and Search ES Lambda ####################################################
 
 data "aws_vpc_endpoint_service" "vpc-endpoint-service" {
-  service = "execute-api-nasuni"
+  service = "execute-api"
 }
 
 resource "aws_vpc_endpoint_service" "vpc-endpoint-service" {
