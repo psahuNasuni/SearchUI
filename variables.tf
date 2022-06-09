@@ -21,7 +21,7 @@ variable "aws_profile" {
 }
 
 variable "admin_secret" {
-  default = "nasuni-labs-os-admin-2"
+  default = "nasuni-labs-os-admin"
 }
 
 variable "internal_secret" {
