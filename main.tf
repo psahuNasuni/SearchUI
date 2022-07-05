@@ -14,6 +14,8 @@ resource "random_id" "unique_SearchUI_id" {
   byte_length = 2
 }
 
+data "aws_caller_identity" "current" {}
+
 data "archive_file" "lambda_zip" {
   type        = "zip"
   source_dir  = "${local.lambda_folder}/"
@@ -468,7 +470,7 @@ resource "aws_lambda_permission" "apigw_lambda" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda_function_get_es_volumes.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "arn:aws:execute-api:${var.region}:514960042727:${aws_api_gateway_rest_api.SearchES-API.id}/${aws_api_gateway_stage.StageTheAPIdeployed.stage_name}/GET${aws_api_gateway_resource.APIresourceForVolumeFetch.path}"
+  source_arn    = "arn:aws:execute-api:${var.region}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.SearchES-API.id}/${aws_api_gateway_stage.StageTheAPIdeployed.stage_name}/GET${aws_api_gateway_resource.APIresourceForVolumeFetch.path}"
 }
 
 #Enable Cors
@@ -662,7 +664,7 @@ resource "aws_lambda_permission" "apigw_lambdaSearchUI" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda_function_search_es.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "arn:aws:execute-api:${var.region}:514960042727:${aws_api_gateway_rest_api.SearchES-API.id}/${aws_api_gateway_stage.StageTheAPIdeployed.stage_name}/GET${aws_api_gateway_resource.APIresourceForSearchUI.path}"
+  source_arn    = "arn:aws:execute-api:${var.region}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.SearchES-API.id}/${aws_api_gateway_stage.StageTheAPIdeployed.stage_name}/GET${aws_api_gateway_resource.APIresourceForSearchUI.path}"
 }
 
 
