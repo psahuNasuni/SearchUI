@@ -330,7 +330,7 @@ resource "aws_vpc_endpoint" "SearchES-API-vpc-endpoint" {
   vpc_id              = var.user_vpc_id
   service_name        = data.aws_vpc_endpoint_service.vpc-endpoint-service.service_name
   vpc_endpoint_type   = "Interface"
-  private_dns_enabled = false
+  private_dns_enabled = true
   security_group_ids  = [data.aws_security_groups.es.ids[0]]
   subnet_ids          = [var.user_subnet_id]
 }
