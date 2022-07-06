@@ -320,6 +320,9 @@ data "aws_vpc_endpoint_service" "vpc-endpoint-service" {
 resource "aws_vpc_endpoint_service" "vpc-endpoint-service" {
   count               = null == data.aws_vpc_endpoint_service.vpc-endpoint-service.service_id ? 1 : 0
   acceptance_required = true
+  tags = {
+    name="vpc-endpoint-service-1"
+  }
   depends_on = [
     data.aws_vpc_endpoint_service.vpc-endpoint-service
   ]
