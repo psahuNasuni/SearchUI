@@ -334,7 +334,7 @@ resource "aws_vpc_endpoint" "SearchES-API-vpc-endpoint" {
   vpc_id              = var.user_vpc_id
   service_name        = data.aws_vpc_endpoint_service.vpc-endpoint-service.service_name
   vpc_endpoint_type   = "Interface"
-  private_dns_enabled = true
+  private_dns_enabled = false
   security_group_ids  = [data.aws_security_groups.es.ids[0]]
   subnet_ids          = [var.user_subnet_id]
 }
@@ -752,11 +752,11 @@ resource "aws_api_gateway_integration_response" "rest_api_test_integration_respo
 ################### END - API Gateway setup for Search ES Lambda ####################################################
 
 output "search_api_endpoint" {
-  value = "${aws_api_gateway_deployment.APIdeploymentOfLambdaFunction.invoke_url}${aws_api_gateway_stage.StageTheAPIdeployed.stage_name}${aws_api_gateway_resource.APIresourceForSearchUI.path}"
+  value = "${local.search_api_url}"
 }
 
 output "volume_api_endpoint" {
-  value = "${aws_api_gateway_deployment.APIdeploymentOfLambdaFunction.invoke_url}${aws_api_gateway_stage.StageTheAPIdeployed.stage_name}${aws_api_gateway_resource.APIresourceForVolumeFetch.path}"
+  value = "${local.volume_api_url}"
 }
 
 ################### START - Create API Gateway Response Object ####################################################
