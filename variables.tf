@@ -36,3 +36,7 @@ variable "stage_name" {
 variable "use_private_ip" {
   default = "N"
 }
+
+variable "vpc_endpoint_id" {
+  default = "vpce-*"
+} 

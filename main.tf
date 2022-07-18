@@ -329,7 +329,8 @@ resource "aws_vpc_endpoint_service" "vpc-endpoint-service" {
 }
 
 resource "aws_vpc_endpoint" "SearchES-API-vpc-endpoint" {
-  count               = "Y" == var.use_private_ip ? 1 : 0
+  # count               = "Y" == var.use_private_ip ? 1 : 0
+  count               = "Y" == var.use_private_ip  && "" == var.vpc_endpoint_id ? 1 : 0
   vpc_id              = var.user_vpc_id
   service_name        = data.aws_vpc_endpoint_service.vpc-endpoint-service.service_name
   vpc_endpoint_type   = "Interface"
@@ -338,6 +339,9 @@ resource "aws_vpc_endpoint" "SearchES-API-vpc-endpoint" {
   subnet_ids          = [var.user_subnet_id]
 }
 
+locals {
+  vpc_endpoint_id   = var.vpc_endpoint_id == "" ? aws_vpc_endpoint.SearchES-API-vpc-endpoint[0].id : var.vpc_endpoint_id
+}
 
 resource "aws_api_gateway_rest_api_policy" "SearchES-API-policy" {
   rest_api_id = aws_api_gateway_rest_api.SearchES-API.id
@@ -379,7 +383,8 @@ resource "aws_api_gateway_rest_api" "SearchES-API" {
   description = "API created for exposing Lambda Functions for fetching Volumes and Search ES Data"
   endpoint_configuration {
     types            = [local.api_type]
-    vpc_endpoint_ids = [var.use_private_ip != "Y" ? null : aws_vpc_endpoint.SearchES-API-vpc-endpoint[0].id]
+    vpc_endpoint_ids = [var.use_private_ip != "Y" ? null : local.vpc_endpoint_id]
+    # vpc_endpoint_ids = [var.use_private_ip != "Y" ? null : aws_vpc_endpoint.SearchES-API-vpc-endpoint[0].id]
   }
 
   depends_on = [
@@ -796,14 +801,23 @@ resource "aws_api_gateway_gateway_response" "response" {
   }
 }
 ################### END - Create API Gateway Response Object ####################################################
-
-
+# Our api which we put inside the js code:
+# https://nzv7g5fdy3.execute-api.us-east-2.amazonaws.com/dev/es-volume
+# rest_api_id = aws_api_gateway_rest_api.SearchES-API.id
+# vpc_endpoint_id = local.vpc_endpoint_id
+# Example of Correct api Format  :
+# https://nzv7g5fdy3-vpce-01761e00bb5fbc4c9.execute-api.us-east-2.amazonaws.com/dev/es-volume
+locals {
+  volume_api_url="https://${aws_api_gateway_rest_api.SearchES-API.id}-${local.vpc_endpoint_id}.execute-api.${var.region}.amazonaws.com/${aws_api_gateway_stage.StageTheAPIdeployed.stage_name}${aws_api_gateway_resource.APIresourceForVolumeFetch.path}"
+  search_api_url="https://${aws_api_gateway_rest_api.SearchES-API.id}-${local.vpc_endpoint_id}.execute-api.${var.region}.amazonaws.com/${aws_api_gateway_stage.StageTheAPIdeployed.stage_name}${aws_api_gateway_resource.APIresourceForSearchUI.path}"
+}
 resource "null_resource" "update_search_js" {
   provisioner "local-exec" {
-    command = "sed -i 's#var volume_api.*$#var volume_api = \"${aws_api_gateway_deployment.APIdeploymentOfLambdaFunction.invoke_url}${aws_api_gateway_stage.StageTheAPIdeployed.stage_name}${aws_api_gateway_resource.APIresourceForVolumeFetch.path}\"; #g' SearchUI_Web/search.js"
+    # command = "sed -i 's#var volume_api.*$#var volume_api = \"${aws_api_gateway_deployment.APIdeploymentOfLambdaFunction.invoke_url}${aws_api_gateway_stage.StageTheAPIdeployed.stage_name}${aws_api_gateway_resource.APIresourceForVolumeFetch.path}\"; #g' SearchUI_Web/search.js"
+    command = "sed -i 's#var volume_api.*$#var volume_api = \"${local.volume_api_url}\"; #g' SearchUI_Web/search.js"
   }
   provisioner "local-exec" {
-    command = "sed -i 's#var search_api.*$#var search_api = \"${aws_api_gateway_deployment.APIdeploymentOfLambdaFunction.invoke_url}${aws_api_gateway_stage.StageTheAPIdeployed.stage_name}${aws_api_gateway_resource.APIresourceForSearchUI.path}\"; #g' SearchUI_Web/search.js"
+    command = "sed -i 's#var search_api.*$#var search_api = \"${local.search_api_url}\"; #g' SearchUI_Web/search.js"
   }
   provisioner "local-exec" {
     command = "sudo service apache2 restart"
