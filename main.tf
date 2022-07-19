@@ -337,6 +337,13 @@ resource "aws_vpc_endpoint" "SearchES-API-vpc-endpoint" {
   private_dns_enabled = false
   security_group_ids  = [data.aws_security_groups.es.ids[0]]
   subnet_ids          = [var.user_subnet_id]
+  tags = {
+    Name            = "${local.resource_name_prefix}-vpc_endpoint"
+    Application     = "Nasuni Analytics Connector with Elasticsearch"
+    Developer       = "Nasuni"
+    PublicationType = "Nasuni Labs"
+    Version         = "V 0.1"
+  }
 }
 
 locals {
