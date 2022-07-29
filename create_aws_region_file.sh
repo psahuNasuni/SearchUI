@@ -15,5 +15,5 @@ echo "user_subnet_id="\"$USER_SUBNET_ID\" >> $UI_TFVARS_FILE
 echo "user_vpc_id="\"$USER_VPC_ID\" >> $UI_TFVARS_FILE
 echo "vpc_endpoint_id="\"$VPC_ENDPOINT_ID\" >> $UI_TFVARS_FILE
 echo "use_private_ip="\"$USE_PRIVATE_IP\" >> $UI_TFVARS_FILE
-echo "security_group_id="\"$SECURITY_GROUP_ID\" >> $UI_TFVARS_FILE
+echo "nac_es_securitygroup_id="\"$SECURITY_GROUP_ID\" >> $UI_TFVARS_FILE
 echo "" >> $UI_TFVARS_FILE

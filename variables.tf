@@ -42,6 +42,6 @@ variable "vpc_endpoint_id" {
   default = "vpce-*"
 } 
 
-variable "security_group_id" {
+variable "nac_es_securitygroup_id" {
   default = ""
 }
