@@ -41,3 +41,7 @@ variable "use_private_ip" {
 variable "vpc_endpoint_id" {
   default = "vpce-*"
 } 
+
+variable "security_group_id" {
+  default = ""
+}
