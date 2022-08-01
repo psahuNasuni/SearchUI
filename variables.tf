@@ -1,5 +1,6 @@
 
 ################### Lambda Provisioning Specific Variables ###################
+# TEST Branch
 variable "user_vpc_id" {
   default = ""
 }
@@ -40,3 +41,7 @@ variable "use_private_ip" {
 variable "vpc_endpoint_id" {
   default = "vpce-*"
 } 
+
+variable "nac_es_securitygroup_id" {
+  default = ""
+}
