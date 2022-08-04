@@ -15,6 +15,9 @@ from elasticsearch.connection.http_requests import RequestsHttpConnection
 from requests_aws4auth import AWS4Auth
 
 from elasticsearch import Elasticsearch, helpers
+from elasticsearch import Elasticsearch, helpers
+import requests
+from requests.auth import HTTPBasicAuth
 
 
 def lambda_handler(event, context):
@@ -40,15 +43,14 @@ def lambda_handler(event, context):
 
     password = secret_nct_nce_admin['nac_es_admin_password']
     data_file_obj = '/tmp/data.json'
-    merge_link = '\"https://' + link + \
-        '_opendistro/_security/api/rolesmapping/all_access\"'
-    cmd = 'curl -X PUT -u \"' + username + ':' + password + \
-        '\" -H "Content-Type:application/json" ' + \
-        merge_link + ' -d \"@/tmp/data.json\"'
-    print(cmd)
-    status, output = subprocess.getstatusoutput(cmd)
-    print(output)
-    print(link)
+
+    merge_link = '\"https://'+link+'_opendistro/_security/api/rolesmapping/all_access\"'
+    url = 'https://' + link + '_opendistro/_security/api/rolesmapping/all_access/' 
+
+    headers = {'content-type': 'application/json'}
+
+    response = requests.put(url, auth=HTTPBasicAuth(username, password), headers=headers, data=role_data)
+    print(response.text)
     es = launch_es(secret_nct_nce_admin['nac_es_url'], secret_es_region)
 
     resp = search(es, event)
