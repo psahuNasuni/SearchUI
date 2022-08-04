@@ -1,6 +1,5 @@
 
 ################### Lambda Provisioning Specific Variables ###################
-# TEST Branch
 variable "user_vpc_id" {
   default = ""
 }
@@ -10,7 +9,7 @@ variable "user_subnet_id" {
 }
 
 variable "runtime" {
-  default = "python3.6"
+  default = "python3.9"
 }
 
 variable "region" {
