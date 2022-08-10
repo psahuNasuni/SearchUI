@@ -1,3 +1,4 @@
+##main
 locals {
   lambda_code_files              = "SearchUI"
   lambda_code_file_name_SearchUI = "Search_UI_lambda"
