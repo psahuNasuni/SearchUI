@@ -44,3 +44,7 @@ variable "vpc_endpoint_id" {
 variable "nac_es_securitygroup_id" {
   default = ""
 }
+
+variable "git_branch" {
+  default=""
+}
