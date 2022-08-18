@@ -27,11 +27,8 @@ function trackerStart(){
         console.log(data.INTEGRATIONS);
         dataArr = result[0][1];
         console.log(dataArr)
-        console.log(dataArr.VOL_NAME1_OS._source.service)
         volumes = Object.keys(result[0][1])
-        
         console.log(volumes)
-        console.log(dataArr.VOL_NAME1_OS._source);
         tableAppend(result,volumes);
 
         
