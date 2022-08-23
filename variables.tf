@@ -48,3 +48,6 @@ variable "nac_es_securitygroup_id" {
 variable "git_branch" {
   default=""
 }
+variable "nac_scheduler_name" {
+  default=""
+}
