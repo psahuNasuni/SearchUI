@@ -1,6 +1,6 @@
 #!/bin/bash
 CHECK=""
-NAC_SCHEDULER_NAME="$1"
+#NAC_SCHEDULER_NAME="$1"
 ### Create Apache server logs at defined path: /etc/apache2/logs . Log path can be changed as per need.
 ##sed -i 's#var schedulerName.*$#var schedulerName= "'"${NAC_SCHEDULER_NAME}"'"; #g' $HOME/nasuni-opensearch-userinterface/Tracker_UI/docs/fetch.js"
 APACHE_LOG_DIR="/etc/apache2/logs"
