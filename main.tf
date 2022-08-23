@@ -1,4 +1,6 @@
+
 ##main
+
 locals {
   lambda_code_files              = "SearchUI"
   lambda_code_file_name_SearchUI = "Search_UI_lambda"
@@ -821,6 +823,9 @@ resource "null_resource" "update_search_js" {
   }
   provisioner "local-exec" {
     command = "sed -i 's#var search_api.*$#var search_api = \"${local.search_api_url}\"; #g' SearchUI_Web/search.js"
+  }
+  provisioner "local-exec" {
+    command = "sed -i 's#var schedulerName.*$#var schedulerName = \"${var.nac_scheduler_name}\"; #g' Tracker_UI/docs/fetch.js"
   }
   provisioner "local-exec" {
     command = "sudo service apache2 restart"
