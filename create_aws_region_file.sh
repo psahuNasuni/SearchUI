@@ -19,3 +19,4 @@ echo "use_private_ip="\"$USE_PRIVATE_IP\" >> $UI_TFVARS_FILE
 echo "nac_es_securitygroup_id="\"$SECURITY_GROUP_ID\" >> $UI_TFVARS_FILE
 echo "nac_scheduler_name="\"$NAC_SCHEDULER_NAME\" >> $UI_TFVARS_FILE
 echo "" >> $UI_TFVARS_FILE
+# End creation of TFVARS file 
