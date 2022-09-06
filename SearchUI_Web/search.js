@@ -1,7 +1,6 @@
 // Update this variable to point to your domain.
 // var apigatewayendpoint = 'https://jrol9tzdwc.execute-api.us-east-2.amazonaws.com/dev/search-es';
 // var volume_api = 'https://jrol9tzdwc.execute-api.us-east-2.amazonaws.com/dev/es-volume';
-// starting of vaars abc
 var search_api = ""; 
 var volume_api = "";
 var loadingdiv = $('#loading');
@@ -19,7 +18,7 @@ var index = 0;
 var numArr = [];
 var result_index =0;
 
-// Executes the search function 250 milliseconds after user stops typing
+// Executes the search function 250 milliseconds after user stops typing abc abc
 searchbox.keyup(function() {
     clearTimeout(timer);
     timer = setTimeout(search, 500);
