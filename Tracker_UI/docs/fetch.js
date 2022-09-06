@@ -4,7 +4,7 @@ var volumes = [];
 var services = [];
 var rowIndex = 0;
 var source;
-var schedulerName="E2E-vol-330-01"
+var schedulerName=""
 var trackerDoc = schedulerName+"_tracker.json"
 
 function readTextFile(file, callback) {
