@@ -3,7 +3,7 @@
 
 locals {
   lambda_code_files              = "SearchUI"
-  lambda_code_file_name_SearchUI = "Search_UI_lambda"
+  lambda_code_file_name_SearchUI = "search_es_indices"
   lambda_code_file_name_NMC_VOL  = "get_volume_names"
   lambda_folder                  = "Search_UI_lambda"
   lambda_code_extension          = ".py"
