@@ -8,7 +8,7 @@
   <body onload="start()">
 	<nav class="navbar navbar-expand-lg navbar-light bg-light header">
 		<a href="#" class="navbar-brand logo">
-			<img src="https://www.nasuni.com/wp-content/themes/nasuni/dist/img/logo-color.svg" alt="CoolBrand">
+			<img src="https://www.nasuni.com/wp-content/themes/nasuni/dist/img/logo-color.svg" alt="CoolBrand"></img>
 		</a>
 	</nav>
 	<div class="background">
@@ -21,7 +21,7 @@
 				<h1 class="text-center titleText"><b>Nasuni ElasticSearch</h1>
 				<br>
 					<div class="search-panel">
-						<input class="searchMe" id="search" autocomplete="off" placeholder="Search">
+						<input class="searchMe" id="search" autocomplete="off" placeholder="Search" onkeyup="myFunction()">
 						<select class="select-box" id="selectVolume" onchange="dropDownData(this.value)"
 							onchange="this.form.submit()">
 							<option id="defVal" value="none" selected disabled hidden></option>
@@ -63,7 +63,9 @@
 
 	<!-- jQuery library -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<!-- <script  src="./search.js"></script> -->
 	<script src="pagination.js"></script>
+	<script type="module" src="./node_modules/jquery/src/jquery.js"></script>
 
 	<!-- Latest compiled JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>

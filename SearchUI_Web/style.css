@@ -14,8 +14,8 @@ body {
 }
 
 .logo {
-	position:fixed;
-	padding: 5px;
+	position:relative;
+	padding: 6px;
 	margin: auto;
 	top:0;
 	left:0;

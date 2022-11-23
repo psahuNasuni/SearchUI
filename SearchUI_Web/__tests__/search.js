@@ -3,11 +3,6 @@
 
 var search_api = "https://d0ogf2sqb8-vpce-01fc8b84d8068fafa.execute-api.us-east-2.amazonaws.com/dev/search-es";
 var volume_api = "https://d0ogf2sqb8-vpce-01fc8b84d8068fafa.execute-api.us-east-2.amazonaws.com/dev/es-volume";
-// var loadingdiv = $('#loading');
-// var noresults = $('#noresults');
-// var resultdiv = $('#results');
-// var searchbox = $('input#search');
-// var searchbox = document.getElementById('search');
 var loadingdiv = document.getElementById('loading')
 var noresults = document.getElementById('noresults')
 var resultdiv = document.getElementsByClassName('resultsDiv')[0]
@@ -129,12 +124,13 @@ export function replaceAll(chars,arr) {
         }
 
     }
-    appendDropDown(arr);
+    return arr.toString()
+    appendDropDown/* istanbul ignore next */(arr);
     // return(arr.join())
 }
 
 //Appending from volume name array to drop down
-function appendDropDown/* istanbul ignore next */(arr) {
+function appendDropDown(arr) {
 
 
     var selectOpt = document.getElementById("selectVolume");
@@ -153,7 +149,7 @@ function appendDropDown/* istanbul ignore next */(arr) {
 }
 
 
-function indexChange() {
+export function indexChange() {
     for (var x = 0; x < pagiResults; x++) {
         var y = x * dataLen;
         numArr.push(y);
@@ -163,14 +159,14 @@ function indexChange() {
 
     resultdiv =function() { return; };
     resultdiv='<p class="result-status">Found ' + result_index + ' results.</p>';
-    noresults.style.display = "none";
-    loading.style.display = "none";
-
+    // noresults.style.display = "none";
+    // loading.style.display = "none";
+    return resultdiv
     appendData(resultdiv, responseArr);
 }
 
 //Appending all the results to the main resultdiv 
-function appendData(resultdiv, data) {
+export function appendData(resultdiv, data) {
     for (var j = index; j < dataLen + index ; j++) {
         var link = document.createElement("h5");
         var content = document.createElement("span");
@@ -193,7 +189,7 @@ function appendData(resultdiv, data) {
                     
                 }
                 console.log(resultdiv)
-
+                return resultdiv
             stop();
 
         }
@@ -203,24 +199,24 @@ function appendData(resultdiv, data) {
     
 }
 
-function paginationTrigger(data){
+export function paginationTrigger(data){
     if (pagiResults > 0) {
         var totalPages = result_index / dataLen;
         if (totalPages % 1 != 0) {
             totalPages = Math.trunc(totalPages + 1)
         }
 
-        page = Number(pagiResults);
+        var page = Number(pagiResults);
         var paginationDiv = document.getElementById('pagination');
         var ul = document.createElement('ul')
-        paginationDiv.append(ul);
-    
+        
+        // paginationDiv.append/* istanbul ignore next */(ul);
+        
         createPagination(totalPages, page);
+        return paginationDiv
     }
+    
 }
 
 
-// export replaceAll;
-// export {replaceAll,paginationTrigger};
-// // exports {replaceAll}
 export default search;
