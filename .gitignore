@@ -4,7 +4,7 @@ cmd
 # .gitignore
 *.tfstate*
 .terraform
-*.txt
+#*.txt
 *.lock.*
 *.sh
 *.zip
