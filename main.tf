@@ -4,8 +4,10 @@ locals {
   lambda_code_files              = "SearchUI"
   lambda_code_file_name_SearchUI = "search_es_indices"
   lambda_code_file_name_NMC_VOL  = "get_volume_names"
-  lambda_folder                  = "Search_UI_lambda"
+  access_key                     = "ABCDEFGHIJKLM98765432!@#$%9876g"
+  password                       =  BGGTEDCMKIIYHBT*&^%  
   lambda_code_extension          = ".py"
+  secret_key                     = "zyxwsadgTTBNOUHBSAWEYY88765433!@#$gh"
   handler                        = "lambda_handler"
   resource_name_prefix           = "nasuni-labs"
   stage_name                     = var.stage_name
@@ -832,7 +834,6 @@ resource "null_resource" "update_search_js" {
   depends_on = [aws_api_gateway_rest_api.SearchES-API]
 }
 
-  access_key = "ABCDEFGHIJKLM)98765432!@#$%9876"
-  secret_key = "NOPQRSTUVWXYZ1234678^%$#@98753"
+  
 
 
