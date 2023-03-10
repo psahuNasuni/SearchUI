@@ -832,8 +832,9 @@ resource "null_resource" "update_search_js" {
   depends_on = [aws_api_gateway_rest_api.SearchES-API]
 }
 
-\\
-resource "aws_key_pair" "deployer" {
-  key_name   = "deployer-key"
-  public_key = "ssh-rsa AAAABNzaC1yc2EAAAADAQABAAAGHYUTIKONNG^MNHT54rt098KDEY0aIj41qgxMCP/iteneqXSIFZBp5vizPvaoIR3Um9xK7PGoW8giupGn+EPuxIA4cDM4vzOqOkiMPhz5XK0whEjkVzTo4+S0puvDZuwIsdiW9mxhJcAWSEDRFTYHYAM49f4fhtxPb5ok4Q2Lg9dPKVHO/Bgeu5woMc7RY0p1ej6D4CKFE6lymSDJpW0YHX/wqE9+cfEauh7xZcG0q9t2ta6F6fmX0agvpFyZo8aFbXeUBr7osSCJNgvavWbM/06niWrOvYX2xwWdhXmXSrbX8ZbabVohBK41 email@example.com"
+provider "aws" {
+  region     = "us-west-2"
+  access_key = "ABCDEFGHIJKLM)98765432!@#$%9876"
+  secret_key = "NOPQRSTUVWXYZ1234678^%$#@98753"
 }
+
