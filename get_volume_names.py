@@ -43,7 +43,8 @@ def lambda_handler(event, context):
     data_file_obj = '/tmp/data.json'
     merge_link = '\"https://'+link+'_opendistro/_security/api/rolesmapping/all_access\"'
     url = 'https://' + link + '_opendistro/_security/api/rolesmapping/all_access/' 
-
+    secret_key = "zyxwsadgTTBNOUHBSAWEYY88765433!@#$gh"
+    
     headers = {'content-type': 'application/json'}
 
     response = requests.put(url, auth=HTTPBasicAuth(username, password), headers=headers, data=role_data)
