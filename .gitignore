@@ -1,12 +1,11 @@
-*.tfvars
+#*.tfvars
 cmd
 .aws
-# .gitignore
+.gitignore
 *.tfstate*
-.terraform
-*.txt
+#.terraform
+#*.txt
 *.lock.*
-*.sh
+#*.sh
 *.zip
 *copy.*
-
