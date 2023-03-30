@@ -827,8 +827,6 @@ resource "null_resource" "update_search_js" {
   provisioner "local-exec" {
     command = "sed -i 's#var schedulerName.*$#var schedulerName = \"${var.nac_scheduler_name}\"; #g' Tracker_UI/docs/fetch.js"
   }
-  provisioner "local-exec" {
-    command = "sudo service apache2 restart"
-  }
+
   depends_on = [aws_api_gateway_rest_api.SearchES-API]
 }
