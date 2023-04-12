@@ -13,7 +13,3 @@ jobs:
         uses: snyk/actions/iac@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      - uses: actions/upload-artifact@v3
-        with:
-          name: my-artifact
-          path: scan-results/iac.txt
