@@ -74,9 +74,9 @@ function tableAppend(result,volumes) {
                     button.appendChild(a)
                     a.appendChild(link)
 
-                    if(source[i]._source.service==="KENDRA" || source[i]._source.service==="kendra"){
+                    if(source[i]._source.service.toUpperCase()==="KENDRA"){
                         a.href=source[i]._source.kendra_url
-                    }else if(source[i]._source.service==="ES" || source[i]._source.service==="OS"){
+                    }else if(source[i]._source.service.toUpperCase()==="ES" || source[i]._source.service.toUpperCase()==="OS"){
                         a.href=source[i]._source.default_url+"?q="+source[i]._source.volume
                     }
                 
